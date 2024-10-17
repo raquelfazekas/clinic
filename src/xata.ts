@@ -217,8 +217,6 @@ const DatabaseClient = buildClient();
 const defaultOptions = {
   databaseURL:
     "https://Raquel-de-Jesus-Fazekas-s-workspace-09pdct.us-east-1.xata.sh/db/clinic",
-  apiKey: process.env.DATABASE_URL,
-  branch: process.env.XATA_BRANCH || "main",
 };
 
 export class XataClient extends DatabaseClient<DatabaseSchema> {
