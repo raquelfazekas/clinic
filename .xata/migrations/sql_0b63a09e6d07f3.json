@@ -1,0 +1,18 @@
+{
+  "done": true,
+  "migration": {
+    "name": "sql_0b63a09e6d07f3",
+    "operations": [
+      {
+        "sql": {
+          "up": "CREATE TABLE IF NOT EXISTS events (id uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL, name text NOT NULL, description text, \"durationInMinutes\" int NOT NULL, \"clerkUserId\" text NOT NULL, \"isActive\" boolean DEFAULT true NOT NULL)"
+        }
+      }
+    ]
+  },
+  "migrationType": "inferred",
+  "name": "sql_0b63a09e6d07f3",
+  "parent": "sql_ce54b873c4ef33",
+  "schema": "public",
+  "startedAt": "2024-10-17T17:36:55.167094Z"
+}

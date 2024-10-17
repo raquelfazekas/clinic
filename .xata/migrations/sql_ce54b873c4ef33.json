@@ -1,0 +1,18 @@
+{
+  "done": true,
+  "migration": {
+    "name": "sql_ce54b873c4ef33",
+    "operations": [
+      {
+        "sql": {
+          "up": "CREATE TYPE bb_633oisv3ih0fp8t3rm1ntb44m4_09pdct.day AS ENUM ('segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sabádo', 'domingo')"
+        }
+      }
+    ]
+  },
+  "migrationType": "inferred",
+  "name": "sql_ce54b873c4ef33",
+  "parent": "mig_cs8jsbs2vvgao6une82g",
+  "schema": "public",
+  "startedAt": "2024-10-17T17:36:54.983468Z"
+}

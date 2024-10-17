@@ -1,0 +1,18 @@
+{
+  "done": true,
+  "migration": {
+    "name": "sql_3c07741bdd1b98",
+    "operations": [
+      {
+        "sql": {
+          "up": "DO $$BEGIN ALTER TABLE \"scheduleAvailabilities\" ADD CONSTRAINT \"scheduleAvailabilities_scheduleId_schedules_id_fk\" FOREIGN KEY (\"scheduleId\") REFERENCES bb_633oisv3ih0fp8t3rm1ntb44m4_09pdct.schedules (id) ON DELETE CASCADE; EXCEPTION \n WHEN duplicate_object THEN null;\n END$$"
+        }
+      }
+    ]
+  },
+  "migrationType": "inferred",
+  "name": "sql_3c07741bdd1b98",
+  "parent": "sql_abcafeab97e200",
+  "schema": "public",
+  "startedAt": "2024-10-17T17:36:56.291026Z"
+}

@@ -1,0 +1,18 @@
+{
+  "done": true,
+  "migration": {
+    "name": "sql_6b86819da198ec",
+    "operations": [
+      {
+        "sql": {
+          "up": "ALTER TABLE schedules ADD COLUMN \"updatedAt\" timestamp DEFAULT now() NOT NULL"
+        }
+      }
+    ]
+  },
+  "migrationType": "inferred",
+  "name": "sql_6b86819da198ec",
+  "parent": "sql_23ef8177141783",
+  "schema": "public",
+  "startedAt": "2024-10-17T17:44:26.314838Z"
+}

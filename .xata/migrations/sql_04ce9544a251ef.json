@@ -1,0 +1,18 @@
+{
+  "done": true,
+  "migration": {
+    "name": "sql_04ce9544a251ef",
+    "operations": [
+      {
+        "sql": {
+          "up": "CREATE INDEX IF NOT EXISTS \"clerkUserIdIndex\" ON events USING btree (\"clerkUserId\")"
+        }
+      }
+    ]
+  },
+  "migrationType": "inferred",
+  "name": "sql_04ce9544a251ef",
+  "parent": "sql_3c07741bdd1b98",
+  "schema": "public",
+  "startedAt": "2024-10-17T17:36:56.600237Z"
+}

@@ -1,0 +1,18 @@
+{
+  "done": true,
+  "migration": {
+    "name": "sql_abcafeab97e200",
+    "operations": [
+      {
+        "sql": {
+          "up": "CREATE TABLE IF NOT EXISTS schedules (id uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL, timezone text NOT NULL, \"clerkUserId\" text NOT NULL, CONSTRAINT \"schedules_clerkUserId_unique\" UNIQUE (\"clerkUserId\"))"
+        }
+      }
+    ]
+  },
+  "migrationType": "inferred",
+  "name": "sql_abcafeab97e200",
+  "parent": "sql_20450d204683bc",
+  "schema": "public",
+  "startedAt": "2024-10-17T17:36:55.893284Z"
+}

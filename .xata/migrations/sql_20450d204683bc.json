@@ -1,0 +1,18 @@
+{
+  "done": true,
+  "migration": {
+    "name": "sql_20450d204683bc",
+    "operations": [
+      {
+        "sql": {
+          "up": "CREATE TABLE IF NOT EXISTS \"scheduleAvailabilities\" (id uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL, \"scheduleId\" uuid NOT NULL, \"startTime\" text NOT NULL, \"endTime\" text NOT NULL, \"dayOfWeek\" day NOT NULL)"
+        }
+      }
+    ]
+  },
+  "migrationType": "inferred",
+  "name": "sql_20450d204683bc",
+  "parent": "sql_0b63a09e6d07f3",
+  "schema": "public",
+  "startedAt": "2024-10-17T17:36:55.534505Z"
+}

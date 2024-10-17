@@ -1,0 +1,18 @@
+{
+  "done": true,
+  "migration": {
+    "name": "sql_25bd1f12feb675",
+    "operations": [
+      {
+        "sql": {
+          "up": "ALTER TABLE events ADD COLUMN \"createdAt\" timestamp DEFAULT now() NOT NULL"
+        }
+      }
+    ]
+  },
+  "migrationType": "inferred",
+  "name": "sql_25bd1f12feb675",
+  "parent": "sql_22011917f7ef11",
+  "schema": "public",
+  "startedAt": "2024-10-17T17:44:25.355648Z"
+}

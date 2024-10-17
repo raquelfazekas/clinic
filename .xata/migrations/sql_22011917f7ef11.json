@@ -1,0 +1,18 @@
+{
+  "done": true,
+  "migration": {
+    "name": "sql_22011917f7ef11",
+    "operations": [
+      {
+        "sql": {
+          "up": "CREATE INDEX IF NOT EXISTS \"sheduleIdIndex\" ON \"scheduleAvailabilities\" USING btree (\"scheduleId\")"
+        }
+      }
+    ]
+  },
+  "migrationType": "inferred",
+  "name": "sql_22011917f7ef11",
+  "parent": "sql_04ce9544a251ef",
+  "schema": "public",
+  "startedAt": "2024-10-17T17:36:56.761432Z"
+}
