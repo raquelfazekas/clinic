@@ -1,0 +1,6 @@
+{
+  "databaseURL": "https://Raquel-de-Jesus-Fazekas-s-workspace-09pdct.us-east-1.xata.sh/db/clinic",
+  "codegen": {
+    "output": "src/drizzle/xata.ts"
+  }
+}
