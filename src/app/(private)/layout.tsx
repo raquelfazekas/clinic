@@ -12,8 +12,8 @@ export default function PrivateLayout({ children }: { children: ReactNode }) {
             <BrainIcon className="size-6" />
             <span className="sr-only sm:not-sr-only">Raízes do Cérebro</span>
           </div>
-          <NavLink href="/events">Events</NavLink>
-          <NavLink href="/schedule">Schedule</NavLink>
+          <NavLink href="/events">Eventos</NavLink>
+          <NavLink href="/schedule">Agendamentos</NavLink>
           <div className="ml-auto size-10">
             <UserButton
               appearance={{ elements: { userButtonAvatarBox: "size-full" } }}
