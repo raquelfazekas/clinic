@@ -46,3 +46,23 @@ export async function updateEvent(
 
   redirect("/events");
 }
+
+export async function deleteEvent(
+  id: string
+): Promise<{ error: boolean } | undefined> {
+  const { userId } = auth();
+
+  if (userId == null) {
+    return { error: true };
+  }
+
+  const { records } = await db
+    .delete(EventTable)
+    .where(and(eq(EventTable.id, id), eq(EventTable.clerkUserId, userId)));
+
+  if (!records) {
+    return { error: true };
+  }
+
+  redirect("/events");
+}

@@ -14,11 +14,23 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
-import { Button } from "../ui/button";
 import Link from "next/link";
+import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import { Switch } from "../ui/switch";
-import { createEvent, updateEvent } from "@/server/actions/events";
+import { createEvent, deleteEvent, updateEvent } from "@/server/actions/events";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogHeader,
+  AlertDialogTrigger,
+  AlertDialogTitle,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "../ui/alert-dialog";
+import { useTransition } from "react";
 
 export function EventForm({
   event,
@@ -31,6 +43,7 @@ export function EventForm({
     isActive: boolean;
   };
 }) {
+  const [isDeletePending, startDeleteTransition] = useTransition();
   const form = useForm<z.infer<typeof eventFormSchema>>({
     resolver: zodResolver(eventFormSchema),
     defaultValues: event ?? {
@@ -46,7 +59,7 @@ export function EventForm({
 
     if (data?.error) {
       form.setError("root", {
-        message: "Erro para salvar agendamento!",
+        message: "There was an error saving your event",
       });
     }
   }
@@ -67,12 +80,12 @@ export function EventForm({
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Nome Evento</FormLabel>
+              <FormLabel>Event Name</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
               <FormDescription>
-                Nome que usuários vão ver quando agendando.
+                The name users will see when booking
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -83,11 +96,11 @@ export function EventForm({
           name="durationInMinutes"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Duração</FormLabel>
+              <FormLabel>Duration</FormLabel>
               <FormControl>
                 <Input type="number" {...field} />
               </FormControl>
-              <FormDescription>Em minutos</FormDescription>
+              <FormDescription>In minutes</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -97,11 +110,13 @@ export function EventForm({
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Informações adicionais</FormLabel>
+              <FormLabel>Description</FormLabel>
               <FormControl>
                 <Textarea className="resize-none h-32" {...field} />
               </FormControl>
-              <FormDescription>Em minutos</FormDescription>
+              <FormDescription>
+                Optional description of the event
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -118,18 +133,71 @@ export function EventForm({
                     onCheckedChange={field.onChange}
                   />
                 </FormControl>
-                <FormDescription>
-                  Eventos inativos não ficaram visiveis para agendamento!
-                </FormDescription>
+                <FormLabel>Active</FormLabel>
               </div>
+              <FormDescription>
+                Inactive events will not be visible for users to book
+              </FormDescription>
             </FormItem>
           )}
         />
         <div className="flex gap-2 justify-end">
-          <Button type="button" asChild variant="outline">
-            <Link href="/events">Cancelar</Link>
+          {event && (
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  variant="destructiveGhost"
+                  disabled={isDeletePending || form.formState.isSubmitting}
+                >
+                  Delete
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete
+                    your this event.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    disabled={isDeletePending || form.formState.isSubmitting}
+                    variant="destructive"
+                    onClick={() => {
+                      startDeleteTransition(async () => {
+                        const data = await deleteEvent(event.id);
+
+                        if (data?.error) {
+                          form.setError("root", {
+                            message: "There was an error deleting your event",
+                          });
+                        }
+                      });
+                    }}
+                  >
+                    Delete
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          )}
+
+          <Button
+            disabled={isDeletePending || form.formState.isSubmitting}
+            type="button"
+            asChild
+            variant="outline"
+          >
+            <Link href="/events">Cancel</Link>
           </Button>
-          <Button type="submit">Save</Button>
+          <Button
+            disabled={isDeletePending || form.formState.isSubmitting}
+            type="submit"
+          >
+            Save
+          </Button>
         </div>
       </form>
     </Form>
