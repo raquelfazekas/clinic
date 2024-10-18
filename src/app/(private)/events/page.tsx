@@ -30,7 +30,7 @@ export default async function EventsPage() {
         <h1 className="text-3xl lg:text-4xl xl:text-5xl font-semibold mb-6">
           Agendamentos
         </h1>
-        <Button size="lg" className="text-lg" asChild>
+        <Button size="default" className="text-md" asChild>
           <Link href="/events/new">
             <CalendarPlus className="mr-4 size-6" />
             Novo Agendamento
@@ -38,7 +38,7 @@ export default async function EventsPage() {
         </Button>
       </div>
       {events.length > 0 ? (
-        <div className="grid gap-4 grid-cols-[repeat(auto-fill, minmax(400px,1fr))]">
+        <div className="grid gap-4 grid-cols-[repeat(auto-fill,minmax(400px,1fr))]">
           {events.map((event) => (
             <EventCard key={event.id} {...event} />
           ))}
