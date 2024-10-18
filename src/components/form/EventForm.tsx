@@ -85,7 +85,7 @@ export function EventForm() {
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Duração</FormLabel>
+              <FormLabel>Informação adicional</FormLabel>
               <FormControl>
                 <Textarea className="resize-none h-32" {...field} />
               </FormControl>
