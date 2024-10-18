@@ -20,10 +20,20 @@ import { Textarea } from "../ui/textarea";
 import { Switch } from "../ui/switch";
 import { createEvent } from "@/server/actions/events";
 
-export function EventForm() {
+export function EventForm({
+  event,
+}: {
+  event?: {
+    id: string;
+    name: string;
+    description?: string;
+    durationInMinutes: number;
+    isActive: boolean;
+  };
+}) {
   const form = useForm<z.infer<typeof eventFormSchema>>({
     resolver: zodResolver(eventFormSchema),
-    defaultValues: {
+    defaultValues: event ?? {
       isActive: true,
       durationInMinutes: 30,
     },
@@ -32,7 +42,7 @@ export function EventForm() {
   async function onSubmit(values: z.infer<typeof eventFormSchema>) {
     const data = await createEvent(values);
 
-    if (data.error) {
+    if (data?.error) {
       form.setError("root", {
         message: "Erro para salvar agendamento!",
       });
@@ -85,7 +95,7 @@ export function EventForm() {
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Informação adicional</FormLabel>
+              <FormLabel>Informações adicionais</FormLabel>
               <FormControl>
                 <Textarea className="resize-none h-32" {...field} />
               </FormControl>
