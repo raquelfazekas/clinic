@@ -26,7 +26,7 @@ export default async function AttendancePage({
   });
 
   if (patient) {
-    return redirect(`/consulta/${patient.id}`);
+    return redirect(`/patient/${patient.id}`);
   }
 
   return redirect(`/patient/registration/${eventId}`);

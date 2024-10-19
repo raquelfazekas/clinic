@@ -23,6 +23,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import { patientFormSchema } from "@/schema/patient";
+import { createPatient } from "@/server/actions/patient";
 
 export function PatientForm() {
   const form = useForm<z.infer<typeof patientFormSchema>>({
@@ -31,7 +32,9 @@ export function PatientForm() {
   });
 
   async function onSubmit(values: z.infer<typeof patientFormSchema>) {
-    console.log(values);
+    const res = await createPatient(values);
+
+    console.log(res);
   }
 
   return (
@@ -88,7 +91,7 @@ export function PatientForm() {
         <div className="flex gap-4 flex-col md:flex-row">
           <FormField
             control={form.control}
-            name="nomeSocial"
+            name="socialName"
             render={({ field }) => (
               <FormItem className="flex-1">
                 <FormLabel>Nome Social</FormLabel>
@@ -99,7 +102,7 @@ export function PatientForm() {
               </FormItem>
             )}
           />
-          
+
           <FormField
             control={form.control}
             name="cpf"

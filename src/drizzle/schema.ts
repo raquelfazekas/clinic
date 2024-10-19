@@ -78,6 +78,8 @@ export const scheduleAvailabilityRelations = relations(
 export const PatientTable = pgTable("patients", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: text("name").notNull(),
+  socialName: text("social_name"),
+  cpf: text("cpf").notNull().unique(),
   dateOfBirth: timestamp("dateOfBirth").notNull(),
   gender: text("gender").notNull(),
   estado_civil: text('estado_civil').notNull(),
@@ -102,7 +104,7 @@ export const HealthRecordTable = pgTable("health_records", {
   visitDate: timestamp("visitDate").notNull(),
   notes: text("notes"),
   doctor: text("doctor").notNull(),
-  attachments: text("attachments[]"), // Array de arquivos anexados (opcional)
+  attachments: text("attachments[]"),
   createdAt,
 });
 
@@ -113,7 +115,7 @@ export const PrescriptionTable = pgTable("prescriptions", {
     .notNull()
     .references(() => PatientTable.id, { onDelete: "cascade" }),
   doctorId: text("doctorId").notNull(),
-  medications: text("medications[]").notNull(), // Array de medicamentos
+  medications: text("medications[]").notNull(),
   createdAt,
   updatedAt,
 });

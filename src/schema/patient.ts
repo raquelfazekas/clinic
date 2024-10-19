@@ -22,5 +22,5 @@ export const patientFormSchema = z.object({
     cpf: z.string()
         .min(1, "CPF é obrigatório")
         .regex(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, "CPF deve estar no formato XXX.XXX.XXX-XX"),
-    nomeSocial: z.string().optional(),
+    socialName: z.string().optional(),
 });

@@ -32,14 +32,22 @@ export default async function SuccessPage({
   return (
     <Card className="max-w-xl mx-auto">
       <CardHeader>
-        <CardTitle>
-          Successfully Booked {event.name} with {calendarUser.fullName}
-        </CardTitle>
+        <div className="flex flex-col gap-3">
+          <CardTitle>
+            {`${event.name} marcada com `}
+            <span className="text-green-500">sucesso!</span>
+          </CardTitle>
+          <CardTitle>
+            {" "}
+            {`Dr(a)`}{" "}
+            <span className="uppercase text-primary">{calendarUser.fullName}</span>
+          </CardTitle>
+        </div>
         <CardDescription>{formatDateTime(startTimeDate)}</CardDescription>
       </CardHeader>
       <CardContent>
-        You should receive an email confirmation shortly. You can safely close
-        this page now.
+        Você deve receber um e-mail de confirmação em breve. Agora você pode
+        fechar esta página com segurança.
       </CardContent>
     </Card>
   );

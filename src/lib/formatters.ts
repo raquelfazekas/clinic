@@ -1,3 +1,5 @@
+import { differenceInMonths, differenceInYears } from "date-fns"
+
 export function formatEventDescription(durationInMinutes: number) {
   const hours = Math.floor(durationInMinutes / 60)
   const minutes = durationInMinutes % 60
@@ -41,4 +43,22 @@ const dateTimeFormatter = new Intl.DateTimeFormat(undefined, {
 
 export function formatDateTime(date: Date) {
   return dateTimeFormatter.format(date)
+}
+
+
+export function calculateAge(dateString: string): string {
+  const birthDate = new Date(dateString)
+  const currentDate = new Date()
+
+  const years = differenceInYears(currentDate, birthDate);
+  const months = differenceInMonths(currentDate, birthDate) % 12
+
+  const yearString = years === 1 ? '1 ano' : `${years} anos`
+  const monthString = months === 1 ? '1 mês' : `${months} meses`
+
+  if (months === 0) {
+    return yearString
+  }
+
+  return `${yearString} e ${monthString}`
 }
