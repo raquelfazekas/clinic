@@ -73,3 +73,67 @@ export const scheduleAvailabilityRelations = relations(
     }),
   })
 );
+
+// --- Pacientes ---
+export const PatientTable = pgTable("patients", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  name: text("name").notNull(),
+  dateOfBirth: timestamp("dateOfBirth").notNull(),
+  gender: text("gender").notNull(),
+  estado_civil: text('estado_civil').notNull(),
+  children: integer("children").notNull(),
+  work: text("work").notNull(),
+  education: text("education").notNull(),
+  origin: text("origin").notNull(),
+  religion: text("religion").notNull(),
+  email: text("email").notNull().unique(),
+  phone: text("phone"),
+  address: text("address"),
+  createdAt,
+  updatedAt,
+});
+
+// --- Prontuário Eletrônico ---
+export const HealthRecordTable = pgTable("health_records", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  patientId: uuid("patientId")
+    .notNull()
+    .references(() => PatientTable.id, { onDelete: "cascade" }),
+  visitDate: timestamp("visitDate").notNull(),
+  notes: text("notes"),
+  doctor: text("doctor").notNull(),
+  attachments: text("attachments[]"), // Array de arquivos anexados (opcional)
+  createdAt,
+});
+
+// --- Prescrição Eletrônica ---
+export const PrescriptionTable = pgTable("prescriptions", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  patientId: uuid("patientId")
+    .notNull()
+    .references(() => PatientTable.id, { onDelete: "cascade" }),
+  doctorId: text("doctorId").notNull(),
+  medications: text("medications[]").notNull(), // Array de medicamentos
+  createdAt,
+  updatedAt,
+});
+
+// --- Relations ---
+export const patientRelations = relations(PatientTable, ({ many }) => ({
+  healthRecords: many(HealthRecordTable),
+  prescriptions: many(PrescriptionTable),
+}));
+
+export const healthRecordRelations = relations(HealthRecordTable, ({ one }) => ({
+  patient: one(PatientTable, {
+    fields: [HealthRecordTable.patientId],
+    references: [PatientTable.id],
+  }),
+}));
+
+export const prescriptionRelations = relations(PrescriptionTable, ({ one }) => ({
+  patient: one(PatientTable, {
+    fields: [PrescriptionTable.patientId],
+    references: [PatientTable.id],
+  }),
+}));

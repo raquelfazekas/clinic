@@ -15,6 +15,13 @@
       "when": 1729187058311,
       "tag": "0001_plain_leper_queen",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1729367036835,
+      "tag": "0002_stiff_carlie_cooper",
+      "breakpoints": true
     }
   ]
 }

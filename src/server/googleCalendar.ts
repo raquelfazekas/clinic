@@ -134,3 +134,18 @@ export async function getSchedulesDay(clerkUserId: string, date: string) {
 
   return JSON.parse(JSON.stringify(events.data.items));
 }
+
+
+export async function getscheduleById(clerkUserId: string, eventId: string) {
+  const oAuthClient = await getOAuthClient(clerkUserId);
+
+  const events = await google.calendar("v3").events.get({
+    eventId,
+    auth: oAuthClient,
+    calendarId: "primary",
+  })
+
+
+  return JSON.parse(JSON.stringify(events.data));
+}
+
