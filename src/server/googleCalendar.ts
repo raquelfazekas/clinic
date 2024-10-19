@@ -76,14 +76,14 @@ export async function createCalendarEvent({
           responseStatus: "accepted",
         },
       ],
-      description: guestNotes ? `Additional Details: ${guestNotes}` : undefined,
+      description: guestNotes ? `Informações Adicionais: ${guestNotes}` : undefined,
       start: {
         dateTime: startTime.toISOString(),
       },
       end: {
         dateTime: addMinutes(startTime, durationInMinutes).toISOString(),
       },
-      summary: `${guestName} + ${calendarUser.fullName}: ${eventName}`,
+      summary: `paciente : ${guestName} ; Dr(a).${calendarUser.fullName} ; evento : ${eventName}`,
     },
   })
 
@@ -109,4 +109,28 @@ async function getOAuthClient(clerkUserId: string) {
   client.setCredentials({ access_token: token.data[0].token })
 
   return client
+}
+
+
+
+
+export async function getSchedulesDay(clerkUserId: string, date: string) {
+  const oAuthClient = await getOAuthClient(clerkUserId);
+
+
+  const startOfDay = `${date}T00:00:00.000Z`
+  const endOfDay = `${date}T23:59:59.999Z`
+
+
+
+  const events = await google.calendar("v3").events.list({
+    calendarId: "primary",
+    singleEvents: true,
+    maxResults: 2500,
+    auth: oAuthClient,
+    timeMin: startOfDay,
+    timeMax: endOfDay,
+  });
+
+  return JSON.parse(JSON.stringify(events.data.items));
 }
