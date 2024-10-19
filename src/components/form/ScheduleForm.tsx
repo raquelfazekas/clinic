@@ -60,9 +60,9 @@ export function ScheduleForm({
     fields: availabilityFields,
   } = useFieldArray({ name: "availabilities", control: form.control });
 
-  const groupedAvailabilityFields = Object.groupBy(
+  const groupedAvailabilityFields = groupBy(
     availabilityFields.map((field, index) => ({ ...field, index })),
-    (availability) => availability.dayOfWeek
+    "dayOfWeek"
   );
 
   async function onSubmit(values: z.infer<typeof scheduleFormSchema>) {
@@ -70,10 +70,10 @@ export function ScheduleForm({
 
     if (data?.error) {
       form.setError("root", {
-        message: "There was an error saving your schedule",
+        message: "Ocorreu algum erro salvando os horários",
       });
     } else {
-      setSuccessMessage("Schedule saved!");
+      setSuccessMessage("Horários Salvos!");
     }
   }
 
@@ -217,10 +217,22 @@ export function ScheduleForm({
 
         <div className="flex gap-2 justify-end">
           <Button disabled={form.formState.isSubmitting} type="submit">
-            Save
+            Salvar
           </Button>
         </div>
       </form>
     </Form>
   );
 }
+
+
+const groupBy = <T, K extends keyof T>(array: T[], key: K): Record<string, T[]> => {
+  return array.reduce((result, currentValue) => {
+    const groupKey = String(currentValue[key]);
+    if (!result[groupKey]) {
+      result[groupKey] = [];
+    }
+    result[groupKey].push(currentValue);
+    return result;
+  }, {} as Record<string, T[]>);
+};

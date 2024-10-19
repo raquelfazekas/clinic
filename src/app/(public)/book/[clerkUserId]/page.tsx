@@ -10,6 +10,7 @@ import {
 import { db } from "@/drizzle";
 import { formatEventDescription } from "@/lib/formatters";
 import { clerkClient } from "@clerk/nextjs/server";
+import { CalendarArrowUp } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -33,11 +34,11 @@ export default async function BookingPage({
   return (
     <div className="max-w-5xl mx-auto">
       <div className="text-4xl md:text-5xl font-semibold mb-4 text-center">
-        {fullName}
+        Dr(a).{fullName}
       </div>
       <div className="text-muted-foreground mb-6 max-w-sm mx-auto text-center">
-        Welcome to my scheduling page. Please follow the instructions to add an
-        event to my calendar.
+        Bem-vindo à página de agendamento da clínica Por favor, siga as instruções para adicionar um evento à minha
+        agenda.
       </div>
       <div className="grid gap-4 grid-cols-[repeat(auto-fill,minmax(300px,1fr))]">
         {events.map((event) => (
@@ -74,7 +75,7 @@ function EventCard({
       {description != null && <CardContent>{description}</CardContent>}
       <CardFooter className="flex justify-end gap-2 mt-auto">
         <Button asChild>
-          <Link href={`/book/${clerkUserId}/${id}`}>Select</Link>
+          <Link href={`/book/${clerkUserId}/${id}`}>Agendar<CalendarArrowUp/></Link>
         </Button>
       </CardFooter>
     </Card>

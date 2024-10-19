@@ -89,7 +89,7 @@ export function MeetingForm({
           name="timezone"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Timezone</FormLabel>
+              <FormLabel>Fuso horário</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
@@ -116,7 +116,7 @@ export function MeetingForm({
             render={({ field }) => (
               <Popover>
                 <FormItem className="flex-1">
-                  <FormLabel>Date</FormLabel>
+                  <FormLabel>Data</FormLabel>
                   <PopoverTrigger asChild>
                     <FormControl>
                       <Button
@@ -129,7 +129,7 @@ export function MeetingForm({
                         {field.value ? (
                           formatDate(field.value)
                         ) : (
-                          <span>Pick a date</span>
+                          <span>Selecione uma data</span>
                         )}
                         <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                       </Button>
@@ -158,7 +158,7 @@ export function MeetingForm({
             name="startTime"
             render={({ field }) => (
               <FormItem className="flex-1">
-                <FormLabel>Time</FormLabel>
+                <FormLabel>Horário</FormLabel>
                 <Select
                   disabled={date == null || timezone == null}
                   onValueChange={(value) =>
@@ -171,8 +171,8 @@ export function MeetingForm({
                       <SelectValue
                         placeholder={
                           date == null || timezone == null
-                            ? "Select a date/timezone first"
-                            : "Select a meeting time"
+                            ? "Selecione uma data/Fuso horário primeiro."
+                            : "Selecione um horário para a consulta."
                         }
                       />
                     </SelectTrigger>
@@ -202,7 +202,7 @@ export function MeetingForm({
             name="guestName"
             render={({ field }) => (
               <FormItem className="flex-1">
-                <FormLabel>Your Name</FormLabel>
+                <FormLabel>Nome completo</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -215,7 +215,7 @@ export function MeetingForm({
             name="guestEmail"
             render={({ field }) => (
               <FormItem className="flex-1">
-                <FormLabel>Your Email</FormLabel>
+                <FormLabel>Email</FormLabel>
                 <FormControl>
                   <Input type="email" {...field} />
                 </FormControl>
@@ -229,7 +229,7 @@ export function MeetingForm({
           name="guestNotes"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Notes</FormLabel>
+              <FormLabel>Informações adicionais(opcional)</FormLabel>
               <FormControl>
                 <Textarea className="resize-none" {...field} />
               </FormControl>
@@ -245,10 +245,10 @@ export function MeetingForm({
             asChild
             variant="outline"
           >
-            <Link href={`/book/${clerkUserId}`}>Cancel</Link>
+            <Link href={`/book/${clerkUserId}`}>Cancelar</Link>
           </Button>
           <Button disabled={form.formState.isSubmitting} type="submit">
-            Schedule
+            Agendar
           </Button>
         </div>
       </form>

@@ -54,7 +54,7 @@ export default async function BookEventPage({
     <Card className="max-w-4xl mx-auto">
       <CardHeader>
         <CardTitle>
-          Book {event.name} with {calendarUser.fullName}
+          Agende {event.name} com {calendarUser.fullName}
         </CardTitle>
         {event.description && (
           <CardDescription>{event.description}</CardDescription>

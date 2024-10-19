@@ -1,4 +1,5 @@
 import { CopyEventButton } from "@/components/CopyEventButton";
+import { CopyEventsPage } from "@/components/CopyEventsPage";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -28,16 +29,19 @@ export default async function EventsPage() {
 
   return (
     <>
-      <div className="flex gap-4 items-baseline">
-        <h1 className="text-3xl lg:text-4xl xl:text-5xl font-semibold mb-6">
+      <div className="flex gap-4 items-baseline flex-col">
+        <h1 className="text-3xl lg:text-4xl xl:text-5xl font-semibold">
           Consulta
         </h1>
-        <Button size="default" className="text-md" asChild>
-          <Link href="/events/new">
-            <CalendarPlus className="mr-4 size-6" />
-            Nova consulta
-          </Link>
-        </Button>
+        <div className="flex flex-row gap-2 my-4">
+          <Button size="default" className="text-md" asChild>
+            <Link href="/events/new">
+              <CalendarPlus className="mr-4 size-6" />
+              Nova consulta
+            </Link>
+          </Button>
+          <CopyEventsPage clerkUserId={userId} />
+        </div>
       </div>
       {events.length > 0 ? (
         <div className="grid gap-4 grid-cols-[repeat(auto-fill,minmax(400px,1fr))]">

@@ -1,4 +1,4 @@
-import { NavLink } from "@/components/NavLink";
+import { NavLink, NavLinks } from "@/components/NavLink"; // Updated import
 import { UserButton } from "@clerk/nextjs";
 import { BrainIcon } from "lucide-react";
 import { ReactNode } from "react";
@@ -12,10 +12,13 @@ export default function PrivateLayout({ children }: { children: ReactNode }) {
             <BrainIcon className="size-6" />
             <span className="sr-only sm:not-sr-only">Raízes do Cérebro</span>
           </div>
-          <NavLink href="/events">Evento</NavLink>
-          <NavLink href="/schedule">Horários</NavLink>
-          <NavLink href="/appointment">Agendamentos</NavLink>
-          <div className="ml-auto size-10">
+          <div className="hidden sm:flex items-center gap-6">
+            <NavLink href="/events">Evento</NavLink>
+            <NavLink href="/schedule">Horários</NavLink>
+            <NavLink href="/appointment">Agendamentos</NavLink>
+          </div>
+          <NavLinks />
+          <div className="hidden md:flex ml-auto size-10">
             <UserButton
               appearance={{ elements: { userButtonAvatarBox: "size-full" } }}
             />
