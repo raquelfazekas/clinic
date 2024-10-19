@@ -35,10 +35,11 @@ export async function getValidTimesFromSchedule(
 
   if (schedule == null) return []
 
-  const groupedAvailabilities = Object.groupBy(
+  const groupedAvailabilities = groupBy(
     schedule.availabilities,
     a => a.dayOfWeek
   )
+  
 
   const eventTimes = await getCalendarEventTimes(event.clerkUserId, {
     start,
@@ -85,25 +86,25 @@ function getAvailabilities(
     | undefined
 
   if (isMonday(date)) {
-    availabilities = groupedAvailabilities.monday
+    availabilities = groupedAvailabilities["segunda-feira"]
   }
   if (isTuesday(date)) {
-    availabilities = groupedAvailabilities.tuesday
+    availabilities = groupedAvailabilities["terça-feira"]
   }
   if (isWednesday(date)) {
-    availabilities = groupedAvailabilities.wednesday
+    availabilities = groupedAvailabilities["quarta-feira"]
   }
   if (isThursday(date)) {
-    availabilities = groupedAvailabilities.thursday
+    availabilities = groupedAvailabilities["quinta-feira"]
   }
   if (isFriday(date)) {
-    availabilities = groupedAvailabilities.friday
+    availabilities = groupedAvailabilities["sexta-feira"]
   }
   if (isSaturday(date)) {
-    availabilities = groupedAvailabilities.saturday
+    availabilities = groupedAvailabilities.sabádo
   }
   if (isSunday(date)) {
-    availabilities = groupedAvailabilities.sunday
+    availabilities = groupedAvailabilities.domingo
   }
 
   if (availabilities == null) return []
@@ -127,4 +128,16 @@ function getAvailabilities(
 
     return { start, end }
   })
+}
+
+
+function groupBy<T>(array: T[], keyGetter: (item: T) => string): Record<string, T[]> {
+  return array.reduce((result, currentItem) => {
+    const key = keyGetter(currentItem);
+    if (!result[key]) {
+      result[key] = [];
+    }
+    result[key].push(currentItem);
+    return result;
+  }, {} as Record<string, T[]>);
 }
