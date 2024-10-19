@@ -10,12 +10,14 @@ export const DAYS_OF_WEEK_IN_ORDER = [
 
 
 export const religions = [
-  "Cristianismo",
+  "Católico",
+  "Evangélico",
   "Islamismo",
   "Hinduísmo",
   "Budismo",
   "Ateísmo",
   "Espiritismo",
+  "Candomblé",
   "Outros"
 ] as const
 
@@ -27,5 +29,7 @@ export const educationLevels = [
   "Superior Incompleto",
   "Superior Completo",
   "Pós-Graduação",
+  "Mestrado",
+  "Doutorado",
   "Outros"
-] as const
+] as const;

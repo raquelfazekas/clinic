@@ -29,22 +29,22 @@ export default async function EventsPage() {
 
   return (
     <>
-      <div className="flex gap-4 items-baseline flex-col">
+      <div className="flex flex-col gap-4 items-baseline md:pl-16">
         <h1 className="text-3xl lg:text-4xl xl:text-5xl font-semibold">
           Consulta
         </h1>
-        <div className="flex flex-row gap-2 my-4">
+        <div className="flex flex-col md:flex-row gap-5 md-gap-3 my-4">
+          <CopyEventsPage clerkUserId={userId} />
           <Button size="default" className="text-md" asChild>
             <Link href="/events/new">
               <CalendarPlus className="mr-4 size-6" />
               Nova consulta
             </Link>
           </Button>
-          <CopyEventsPage clerkUserId={userId} />
         </div>
       </div>
       {events.length > 0 ? (
-        <div className="grid gap-4 grid-cols-[repeat(auto-fill,minmax(400px,1fr))]">
+        <div className="flex flex-wrap justify-center gap-4 overflow-hidden mt-5">
           {events.map((event) => (
             <EventCard key={event.id} {...event} />
           ))}
@@ -83,7 +83,12 @@ function EventCard({
   clerkUserId,
 }: EventCardProps) {
   return (
-    <Card className={cn("flex flex-col", !isActive && "border-secondary/50")}>
+    <Card
+      className={cn(
+        "flex flex-col max-w-[400px] w-full",
+        !isActive && "border-secondary/50"
+      )}
+    >
       <CardHeader className={cn(!isActive && "opacity-50")}>
         <CardTitle>{name}</CardTitle>
         <CardDescription>
