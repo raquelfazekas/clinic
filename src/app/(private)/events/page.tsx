@@ -30,12 +30,12 @@ export default async function EventsPage() {
     <>
       <div className="flex gap-4 items-baseline">
         <h1 className="text-3xl lg:text-4xl xl:text-5xl font-semibold mb-6">
-          Agendamentos
+          Consulta
         </h1>
         <Button size="default" className="text-md" asChild>
           <Link href="/events/new">
             <CalendarPlus className="mr-4 size-6" />
-            Novo Agendamento
+            Nova consulta
           </Link>
         </Button>
       </div>
@@ -48,11 +48,11 @@ export default async function EventsPage() {
       ) : (
         <div className="flex flex-col items-center gap-4">
           <CalendarRange className="size-16 mx-auto" />
-          Você não tem nenhum agendamento ainda. Crie seu primeiro agentamendo!
+          Você não tem nenhuma consulta ainda. Crie sua primeira consulta!
           <Button size="lg" className="text-lg" asChild>
             <Link href="/events/new">
               <CalendarPlus className="mr-4 size-6" />
-              Novo Agendamento
+              Nova consulta
             </Link>
           </Button>
         </div>
@@ -100,7 +100,7 @@ function EventCard({
           />
         )}
         <Button asChild>
-          <Link href={`/events/${id}/edit`}>Edit</Link>
+          <Link href={`/events/${id}/edit`}>Editar</Link>
         </Button>
       </CardFooter>
     </Card>

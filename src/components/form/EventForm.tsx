@@ -59,7 +59,7 @@ export function EventForm({
 
     if (data?.error) {
       form.setError("root", {
-        message: "There was an error saving your event",
+        message: "Ocorreu um erro ao salvar seu evento",
       });
     }
   }
@@ -80,12 +80,12 @@ export function EventForm({
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Event Name</FormLabel>
+              <FormLabel>Nome da consulta</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
               <FormDescription>
-                The name users will see when booking
+                O nome que os pacientes verão ao agendar
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -96,11 +96,11 @@ export function EventForm({
           name="durationInMinutes"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Duration</FormLabel>
+              <FormLabel>Duração</FormLabel>
               <FormControl>
                 <Input type="number" {...field} />
               </FormControl>
-              <FormDescription>In minutes</FormDescription>
+              <FormDescription>Em minutos</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -110,13 +110,11 @@ export function EventForm({
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Description</FormLabel>
+              <FormLabel>Descrição</FormLabel>
               <FormControl>
                 <Textarea className="resize-none h-32" {...field} />
               </FormControl>
-              <FormDescription>
-                Optional description of the event
-              </FormDescription>
+              <FormDescription>Descrição opcional do evento</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -133,10 +131,10 @@ export function EventForm({
                     onCheckedChange={field.onChange}
                   />
                 </FormControl>
-                <FormLabel>Active</FormLabel>
+                <FormLabel>Ativo</FormLabel>
               </div>
               <FormDescription>
-                Inactive events will not be visible for users to book
+                Eventos inativos não serão visíveis para os pacientes reservarem
               </FormDescription>
             </FormItem>
           )}
@@ -154,14 +152,14 @@ export function EventForm({
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
-                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                  <AlertDialogTitle>Você tem certeza?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete
-                    your this event.
+                    Esta ação não pode ser desfeita. Isso excluirá
+                    permanentemente este evento
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogCancel>Cancelar</AlertDialogCancel>
                   <AlertDialogAction
                     disabled={isDeletePending || form.formState.isSubmitting}
                     variant="destructive"
@@ -171,13 +169,13 @@ export function EventForm({
 
                         if (data?.error) {
                           form.setError("root", {
-                            message: "There was an error deleting your event",
+                            message: "Ocorreu um erro ao excluir seu evento",
                           });
                         }
                       });
                     }}
                   >
-                    Delete
+                    Deletar
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
@@ -190,13 +188,13 @@ export function EventForm({
             asChild
             variant="outline"
           >
-            <Link href="/events">Cancel</Link>
+            <Link href="/events">Cancelar</Link>
           </Button>
           <Button
             disabled={isDeletePending || form.formState.isSubmitting}
             type="submit"
           >
-            Save
+            Salvar
           </Button>
         </div>
       </form>

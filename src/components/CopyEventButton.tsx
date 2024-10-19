@@ -52,9 +52,9 @@ function getCopyIcon(copyState: CopyState) {
 function getChildren(copyState: CopyState) {
   switch (copyState) {
     case "idle":
-      return "Copy Link";
+      return "Copiar Link";
     case "copied":
-      return "Copied";
+      return "Copiado";
     case "error":
       return "Error";
   }

@@ -17,7 +17,7 @@ export default async function SchedulePage() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Agendamento</CardTitle>
+        <CardTitle>Horários de atendimento</CardTitle>
       </CardHeader>
       <CardContent>
         <ScheduleForm schedule={Schedule} />
