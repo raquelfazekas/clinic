@@ -52,10 +52,11 @@ export default async function BookEventPage({
 
   return (
     <Card className="max-w-4xl mx-auto">
-      <CardHeader>
-        <CardTitle>
-          Agende {event.name} com {calendarUser.fullName}
+      <CardHeader className="gap-4">
+        <CardTitle className="text-center md:text-left">
+          Dr(a) <span className="text-primary">{calendarUser.fullName}</span>
         </CardTitle>
+        <CardTitle className="text-center md:text-left">Agende {event.name}</CardTitle>
         {event.description && (
           <CardDescription>{event.description}</CardDescription>
         )}
@@ -82,19 +83,19 @@ function NoTimeSlots({
     <Card className="max-w-md mx-auto">
       <CardHeader>
         <CardTitle>
-          Book {event.name} with {calendarUser.fullName}
+          Agende {event.name} com {calendarUser.fullName}
         </CardTitle>
         {event.description && (
           <CardDescription>{event.description}</CardDescription>
         )}
       </CardHeader>
       <CardContent>
-        {calendarUser.fullName} is currently booked up. Please check back later
-        or choose a shorter event.
+        {calendarUser.fullName} não está disponível no momento. Por favor,
+        verifique outra data ou escolha uma consulta mais curta.
       </CardContent>
       <CardFooter>
         <Button asChild>
-          <Link href={`/book/${calendarUser.id}`}>Choose Another Event</Link>
+          <Link href={`/book/${calendarUser.id}`}>Escolha outra consulta</Link>
         </Button>
       </CardFooter>
     </Card>

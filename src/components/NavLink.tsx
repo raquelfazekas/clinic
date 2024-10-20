@@ -6,8 +6,8 @@ import { usePathname } from "next/navigation";
 import { ComponentProps, useState } from "react";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { UserButton } from "@clerk/nextjs";
 import { Menu } from "lucide-react";
+import Image from "next/image";
 
 export function NavLink({ className, ...props }: ComponentProps<typeof Link>) {
   const path = usePathname();
@@ -30,6 +30,10 @@ export function NavLink({ className, ...props }: ComponentProps<typeof Link>) {
 export function NavLinks() {
   const [isOpen, setIsOpen] = useState(false);
 
+  const handleLinkClick = () => {
+    setIsOpen(false);
+  };
+
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
@@ -39,16 +43,20 @@ export function NavLinks() {
           </Button>
         </div>
       </SheetTrigger>
-      <SheetContent>
-        <div className="mt-4 text-center">
-          <UserButton
-            appearance={{ elements: { userButtonAvatarBox: "size-full" } }}
-          />
+      <SheetContent className="overflow-visible">
+        <div className="flex justify-center mt-4">
+          <Image src="/Logo.png" alt="logo_clinic" width={128} height={128} />
         </div>
         <nav className="flex flex-col gap-4 text-center mt-10">
-          <NavLink href="/events">Evento</NavLink>
-          <NavLink href="/schedule">Horários</NavLink>
-          <NavLink href="/appointment">Agendamentos</NavLink>
+          <NavLink href="/events" onClick={handleLinkClick}>
+            Evento
+          </NavLink>
+          <NavLink href="/schedule" onClick={handleLinkClick}>
+            Horários
+          </NavLink>
+          <NavLink href="/appointment" onClick={handleLinkClick}>
+            Agendamentos
+          </NavLink>
         </nav>
       </SheetContent>
     </Sheet>
