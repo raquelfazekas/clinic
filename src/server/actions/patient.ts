@@ -4,6 +4,7 @@ import { db } from "@/drizzle";
 import { patientFormSchema } from "@/schema/patient";
 import { z } from "zod";
 import { PatientTable } from "@/drizzle/schema";
+import { eq } from "drizzle-orm";
 
 export async function createPatient(unsafeData: z.infer<typeof patientFormSchema>) {
     const { success, data } = patientFormSchema.safeParse(unsafeData);
@@ -18,4 +19,11 @@ export async function createPatient(unsafeData: z.infer<typeof patientFormSchema
     const patientId = result[0].id
 
     return { patientId };
+}
+
+
+export async function deletePatientById(patietId: string) {
+    const result = await db.delete(PatientTable).where(eq(PatientTable.id, patietId))
+
+    return JSON.parse(JSON.stringify(result))
 }

@@ -4,7 +4,7 @@ import { GoogleCalendarEvent } from "@/data/types";
 import { getscheduleById } from "@/server/googleCalendar";
 import { auth } from "@clerk/nextjs/server";
 
-export default async function PatientRegistrationPage({
+export default async function PatientRegistrationPageWithEvent({
   params,
 }: {
   params: { eventId: string };
