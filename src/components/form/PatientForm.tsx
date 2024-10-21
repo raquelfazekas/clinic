@@ -24,17 +24,49 @@ import {
 } from "../ui/select";
 import { patientFormSchema } from "@/schema/patient";
 import { createPatient } from "@/server/actions/patient";
+import { useToast } from "@/hooks/use-toast";
+import { formatCPF, formatPhone } from "@/lib/formatters";
+import { ChangeEvent } from "react";
+import { useRouter } from "next/navigation";
 
-export function PatientForm() {
+interface PatientFormProps {
+  defaultValues?: {
+    name?: string;
+    email?: string;
+  };
+}
+
+export function PatientForm({ defaultValues }: PatientFormProps) {
+  const { toast } = useToast();
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof patientFormSchema>>({
     resolver: zodResolver(patientFormSchema),
-    defaultValues: {},
+    defaultValues: {
+      name: defaultValues?.name || "",
+      email: defaultValues?.email || "",
+      socialName: defaultValues?.name || "",
+      children: 0,
+      work: '',
+    },
   });
 
   async function onSubmit(values: z.infer<typeof patientFormSchema>) {
     const res = await createPatient(values);
 
-    console.log(res);
+    if (res.error)
+      return (
+        <div className="text-muted-foreground text-xl">
+          Erro ao salvar paciente
+        </div>
+      );
+
+    toast({
+      title: "Success",
+      description: "Paciente cadastrado com sucesso!",
+    });
+
+    router.push(`/patient/${res.patientId}`);
   }
 
   return (
@@ -106,15 +138,30 @@ export function PatientForm() {
           <FormField
             control={form.control}
             name="cpf"
-            render={({ field }) => (
-              <FormItem className="flex-1">
-                <FormLabel>CPF</FormLabel>
-                <FormControl>
-                  <Input type="text" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            render={({ field }) => {
+              const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+                const inputValue = event.target.value;
+                if (inputValue.length >= 14) {
+                  return;
+                }
+                const formattedValue = formatCPF(inputValue);
+                field.onChange(formattedValue);
+              };
+              return (
+                <FormItem className="flex-1">
+                  <FormLabel>CPF</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="text"
+                      value={field.value || ""}
+                      onChange={handleChange}
+                      placeholder="000.000.000-00"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
           />
         </div>
 
@@ -177,7 +224,7 @@ export function PatientForm() {
               <FormItem className="flex-1">
                 <FormLabel>Número de Filhos</FormLabel>
                 <FormControl>
-                  <Input type="number" {...field} />
+                  <Input type="number" {...field} value={field.value} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -191,7 +238,7 @@ export function PatientForm() {
               <FormItem className="flex-1">
                 <FormLabel>Profissão</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input {...field} value={field.value ?? ""} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -285,15 +332,32 @@ export function PatientForm() {
           <FormField
             control={form.control}
             name="phone"
-            render={({ field }) => (
-              <FormItem className="flex-1">
-                <FormLabel>Telefone</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            render={({ field }) => {
+              const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+                const inputValue = event.target.value;
+                if (inputValue.replace(/\D/g, "").length >= 12) {
+                  return;
+                }
+
+                const formattedValue = formatPhone(inputValue);
+                field.onChange(formattedValue);
+              };
+
+              return (
+                <FormItem className="flex-1">
+                  <FormLabel>Telefone</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="text"
+                      value={field.value || ""}
+                      onChange={handleChange}
+                      placeholder="(DD) 00000-0000"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
           />
 
           <FormField

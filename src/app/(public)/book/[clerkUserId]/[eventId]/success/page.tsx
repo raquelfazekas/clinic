@@ -30,7 +30,7 @@ export default async function SuccessPage({
   const startTimeDate = new Date(startTime);
 
   return (
-    <Card className="max-w-xl mx-auto">
+    <Card className="max-w-xl mx-auto mt-16">
       <CardHeader>
         <div className="flex flex-col gap-3">
           <CardTitle>

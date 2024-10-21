@@ -57,6 +57,9 @@ export function NavLinks() {
           <NavLink href="/appointment" onClick={handleLinkClick}>
             Agendamentos
           </NavLink>
+          <NavLink href="/patient" onClick={handleLinkClick}>
+            Pacientes
+          </NavLink>
         </nav>
       </SheetContent>
     </Sheet>

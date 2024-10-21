@@ -16,7 +16,10 @@ export default async function AttendancePage({
 
   const event: GoogleCalendarEvent = await getscheduleById(userId, eventId);
 
-  const patientEmail = event.attendees[0]?.email;
+  const patientEmail = event.attendees.find(
+    (attendee) => !attendee.organizer
+  )?.email;
+
   if (!patientEmail) {
     return <div>Erro: O evento não contém informações do paciente.</div>;
   }

@@ -1,5 +1,5 @@
 import { DAYS_OF_WEEK_IN_ORDER } from "@/data/constants";
-import { relations } from "drizzle-orm";
+import { InferInsertModel, InferSelectModel, relations } from "drizzle-orm";
 import {
   boolean,
   index,
@@ -94,6 +94,10 @@ export const PatientTable = pgTable("patients", {
   createdAt,
   updatedAt,
 });
+
+export type PatientSelect = InferSelectModel<typeof PatientTable>;
+export type PatientInsert = InferInsertModel<typeof PatientTable>;
+
 
 // --- Prontuário Eletrônico ---
 export const HealthRecordTable = pgTable("health_records", {

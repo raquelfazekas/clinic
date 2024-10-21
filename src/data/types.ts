@@ -31,6 +31,7 @@ export type GoogleCalendarEvent = {
         displayName?: string;
         responseStatus: string;
         self?: boolean;
+        organizer?: boolean
     }>;
     reminders: {
         useDefault: boolean;

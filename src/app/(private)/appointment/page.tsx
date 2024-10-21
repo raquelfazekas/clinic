@@ -5,15 +5,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { getSchedulesDay } from "@/server/googleCalendar";
-import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
 import { format, parseISO } from "date-fns";
 import { GoogleCalendarEvent } from "@/data/types";
+import { getSchedulesDay } from "@/server/googleCalendar";
+import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
-import { CalendarArrowUp } from "lucide-react";
+import { CalendarArrowUp, CalendarRange } from "lucide-react";
+import { AppointmentForm } from "@/components/form/AppointmentForm";
+import { Button } from "@/components/ui/button";
 
 export const revalidate = 0;
 
@@ -22,11 +21,14 @@ export default async function SchedulePage({
 }: {
   searchParams: { date?: string };
 }) {
-  const { userId } = auth();
-  if (userId == null) return redirect("/sign-in");
+  const { userId, redirectToSignIn } = auth();
+  if (userId == null) return redirectToSignIn();
 
   const selectedDate = searchParams.date || format(new Date(), "yyyy-MM-dd");
-  const events = await getSchedulesDay(userId, selectedDate);
+  const events: GoogleCalendarEvent[] = await getSchedulesDay(
+    userId,
+    selectedDate
+  );
 
   const transformDate = (dateString: string) => {
     const date = parseISO(dateString);
@@ -43,23 +45,7 @@ export default async function SchedulePage({
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <form
-              method="get"
-              action="/appointment"
-              className="flex flex-col gap-4"
-            >
-              <label htmlFor="date">Escolha uma data:</label>
-              <Input
-                type="date"
-                id="date"
-                name="date"
-                defaultValue={selectedDate}
-                className="max-w-sm"
-              />
-              <Button type="submit" className="max-w-sm">
-                Ver agendamentos
-              </Button>
-            </form>
+            <AppointmentForm selectedDate={selectedDate} />
           </CardContent>
         </Card>
       </div>
@@ -89,7 +75,11 @@ export default async function SchedulePage({
                       Fim: {new Date(event.end.dateTime).toLocaleString()}
                     </p>
                     <p className="text-sm text-gray-600">
-                      {event.attendees[0].email} <br />
+                      {
+                        event.attendees.find((attendee) => !attendee.organizer)
+                          ?.email
+                      }{" "}
+                      <br />
                       {event.description}
                     </p>
                   </div>
@@ -111,9 +101,12 @@ export default async function SchedulePage({
           })}
         </div>
       ) : (
-        <p className="text-center text-gray-500">
-          Nenhum agendamento encontrado para esta data.
-        </p>
+        <div className="flex flex-col gap-10 my-10">
+          <p className="text-center text-gray-500">
+            Nenhum agendamento encontrado para esta data.
+          </p>
+          <CalendarRange className="size-16 mx-auto text-gray-500" />
+        </div>
       )}
     </div>
   );

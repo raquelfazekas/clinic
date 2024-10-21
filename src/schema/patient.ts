@@ -7,10 +7,11 @@ export const patientFormSchema = z.object({
         .max(new Date(), "Data de nascimento não pode ser no futuro"),
     gender: z.string().min(1, "Gênero é obrigatório"),
     estado_civil: z.string().min(1, "Estado civil é obrigatório"),
-    children: z.coerce
+    children: z
+        .coerce
         .number()
-        .int()
-        .positive("Quantidade de filhos tem que ser maior que 0")
+        .int("A quantidade de filhos deve ser um número inteiro")
+        .min(0, "Quantidade de filhos não pode ser menor que 0") 
         .max(20, "Parabéns você atingiu o número máximo de filhos"),
     work: z.string().min(1, "Trabalho é obrigatório"),
     education: z.string().min(1, "Educação é obrigatória"),

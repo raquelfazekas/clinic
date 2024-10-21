@@ -20,6 +20,7 @@ export default function PrivateLayout({ children }: { children: ReactNode }) {
             <NavLink href="/events">Evento</NavLink>
             <NavLink href="/schedule">Horários</NavLink>
             <NavLink href="/appointment">Agendamentos</NavLink>
+            <NavLink href="/patient">Pacientes</NavLink>
           </div>
           <div className="ml-auto size-10">
             <UserButton
