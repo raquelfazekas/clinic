@@ -22,6 +22,7 @@ import { ArrowLeft, ArrowRight, Ban } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
+import { formatCPF } from "@/lib/formatters";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -48,7 +49,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <>
-      <div className="flex items-center py-4">
+      <div className="flex items-center py-4 gap-4">
         <Input
           placeholder="Filter nomes..."
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
@@ -58,11 +59,16 @@ export function DataTable<TData, TValue>({
           className="max-w-sm"
         />
         <Input
-          placeholder="Filter emails..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
-          }
+          placeholder="Filter CPF..."
+          value={(table.getColumn("cpf")?.getFilterValue() as string) ?? ""}
+          onChange={(event) => {
+            const inputValue = event.target.value;
+            if (inputValue.length >= 14) {
+              return;
+            }
+            const formattedValue = formatCPF(inputValue);
+            table.getColumn("cpf")?.setFilterValue(formattedValue);
+          }}
           className="max-w-sm"
         />
       </div>
