@@ -17,7 +17,7 @@ export default function PrivateLayout({ children }: { children: ReactNode }) {
             </span>
           </div>
           <div className="hidden sm:flex items-center gap-6">
-            <NavLink href="/events">Evento</NavLink>
+            <NavLink href="/events">Eventos</NavLink>
             <NavLink href="/schedule">Horários</NavLink>
             <NavLink href="/appointment">Agendamentos</NavLink>
             <NavLink href="/patient">Pacientes</NavLink>

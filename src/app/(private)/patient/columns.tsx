@@ -64,7 +64,7 @@ const ActionCell: React.FC<ActionCellProps> = ({ patient }) => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+          <DropdownMenuLabel>Ações</DropdownMenuLabel>
           <DropdownMenuItem
             className="flex justify-between"
             onClick={() => router.push(`/patient/${patient.id}`)}

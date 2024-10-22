@@ -53,7 +53,7 @@ export function DataTable<TData, TValue>({
       <div className="flex flex-col md:flex-row py-4 justify-between gap-4">
         <div className="flex flex-col md:flex-row gap-4">
           <Input
-            placeholder="Filtrar nome..."
+            placeholder="Filtrar nomes..."
             value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
             onChange={(event) =>
               table.getColumn("name")?.setFilterValue(event.target.value)
@@ -128,8 +128,8 @@ export function DataTable<TData, TValue>({
                   className="h-24 text-center"
                 >
                   <div className="flex flex-row w-full h-full justify-center items-center gap-3">
-                    <span>No results.</span>
-                    <Ban className="size-10 text-red-600" />
+                    <span>Sem resultados</span>
+                    <Ban className="size-6 text-red-600" />
                   </div>
                 </TableCell>
               </TableRow>
@@ -138,33 +138,27 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
 
-      <div className="flex items-center justify-between space-x-2 py-4">
-        <div className="text-sm">
-          Exibindo {table.getRowModel().rows.length} de {data.length} pacientes
+      <div className="flex items-center justify-end space-x-2 py-4">
+        <div className="flex w-[100px] items-center justify-center text-sm font-medium">
+          Página {table.getState().pagination.pageIndex + 1} de{" "}
+          {table.getPageCount()}
         </div>
-
-        <div className="flex items-center space-x-2">
-          <div className="flex w-[100px] items-center justify-center text-sm font-medium">
-            Página {table.getState().pagination.pageIndex + 1} de{" "}
-            {table.getPageCount()}
-          </div>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            <ArrowLeft className="size-10 text-primary" />
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            <ArrowRight className="size-10 text-primary" />
-          </Button>
-        </div>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          <ArrowLeft className="size-10 text-primary" />
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          <ArrowRight className="size-10 text-primary" />
+        </Button>
       </div>
     </>
   );

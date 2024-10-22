@@ -49,7 +49,7 @@ export function NavLinks() {
         </div>
         <nav className="flex flex-col gap-4 text-center mt-10">
           <NavLink href="/events" onClick={handleLinkClick}>
-            Evento
+            Eventos
           </NavLink>
           <NavLink href="/schedule" onClick={handleLinkClick}>
             Horários
