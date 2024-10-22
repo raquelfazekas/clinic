@@ -18,11 +18,12 @@ export default async function PatientRegistrationPageWithEvent({
   );
 
   const patientEmail = scheduleInfo.attendees.find(
-    (attendee) => attendee.responseStatus === "needsAction"
+    (attendee) => attendee.organizer !== true
   )?.email;
   const patientName = scheduleInfo.attendees.find(
-    (attendee) => attendee.responseStatus === "needsAction"
+    (attendee) => attendee.organizer !== true
   )?.displayName;
+
 
   return (
     <Card>
@@ -30,9 +31,7 @@ export default async function PatientRegistrationPageWithEvent({
         <CardTitle className="text-primary">Cadastro de Paciente</CardTitle>
       </CardHeader>
       <CardContent>
-        <PatientForm
-          defaultValues={{ name: patientName, email: patientEmail }}
-        />
+        <PatientForm defaultValues={{ name: patientName, email: patientEmail }} />
       </CardContent>
     </Card>
   );

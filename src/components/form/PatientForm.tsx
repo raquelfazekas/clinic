@@ -23,16 +23,29 @@ import {
   SelectValue,
 } from "../ui/select";
 import { patientFormSchema } from "@/schema/patient";
-import { createPatient } from "@/server/actions/patient";
+import { createPatient, updatePatient } from "@/server/actions/patient";
 import { useToast } from "@/hooks/use-toast";
 import { formatCPF, formatPhone } from "@/lib/formatters";
 import { ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
 
-interface PatientFormProps {
+export interface PatientFormProps {
   defaultValues?: {
+    id?: string;
     name?: string;
     email?: string;
+    socialName?: string | null;
+    dateOfBirth?: Date;
+    gender?: string;
+    cpf?: string;
+    estado_civil?: string;
+    children?: number;
+    work?: string;
+    education?: string;
+    origin?: string;
+    religion?: string;
+    phone?: string | undefined;
+    address?: string | undefined;
   };
 }
 
@@ -43,27 +56,37 @@ export function PatientForm({ defaultValues }: PatientFormProps) {
   const form = useForm<z.infer<typeof patientFormSchema>>({
     resolver: zodResolver(patientFormSchema),
     defaultValues: {
+      ...defaultValues,
       name: defaultValues?.name || "",
       email: defaultValues?.email || "",
-      socialName: defaultValues?.name || "",
-      children: 0,
-      work: '',
+      socialName: defaultValues?.socialName || "",
+      children: defaultValues?.children || 0,
+      work: defaultValues?.work || "",
     },
   });
 
   async function onSubmit(values: z.infer<typeof patientFormSchema>) {
-    const res = await createPatient(values);
+    let res;
 
-    if (res.error)
+    if (defaultValues?.id) {
+      res = await updatePatient(defaultValues.id, values);
+    } else {
+      res = await createPatient(values);
+    }
+
+    if (!res || res.error) {
       return (
         <div className="text-muted-foreground text-xl">
           Erro ao salvar paciente
         </div>
       );
+    }
 
     toast({
       title: "Success",
-      description: "Paciente cadastrado com sucesso!",
+      description: defaultValues?.id
+        ? "Paciente atualizado com sucesso!"
+        : "Paciente cadastrado com sucesso!",
     });
 
     router.push(`/patient/${res.patientId}`);
@@ -377,7 +400,7 @@ export function PatientForm({ defaultValues }: PatientFormProps) {
 
         <div className="flex gap-2 justify-end">
           <Button disabled={form.formState.isSubmitting} type="submit">
-            Cadastrar Paciente
+            {defaultValues?.id ? "Atualizar Paciente" : "Cadastrar Paciente"}
           </Button>
         </div>
       </form>

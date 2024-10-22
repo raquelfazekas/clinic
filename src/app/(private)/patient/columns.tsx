@@ -11,7 +11,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal } from "lucide-react";
+import {
+  MoreHorizontal,
+  UserRoundPen,
+  UserRoundSearch,
+  UserRoundX,
+} from "lucide-react";
 import {
   AlertDialog,
   AlertDialogTrigger,
@@ -61,15 +66,26 @@ const ActionCell: React.FC<ActionCellProps> = ({ patient }) => {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuItem
-            onClick={() => navigator.clipboard.writeText(patient.id)}
+            className="flex justify-between"
+            onClick={() => router.push(`/patient/${patient.id}`)}
           >
             Histórico
+            <UserRoundSearch />
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Editar</DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => router.push(`/patient/edit/${patient.id}`)}
+            className="flex justify-between"
+          >
+            Editar <UserRoundPen />
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onSelect={() => setOpenAlert(true)}>
+          <DropdownMenuItem
+            onSelect={() => setOpenAlert(true)}
+            className="flex justify-between"
+          >
             Deletar
+            <UserRoundX />
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
