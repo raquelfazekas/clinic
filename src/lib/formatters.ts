@@ -64,6 +64,17 @@ export function calculateAge(dateString: string): string {
 }
 
 
+export function calculateAgeWithOutMonths(dateString: string): string {
+  const birthDate = new Date(dateString)
+  const currentDate = new Date()
+
+  const years = differenceInYears(currentDate, birthDate);
+
+  return years.toString()
+}
+
+
+
 export function formatCPF(value: string) {
   const numericValue = value.replace(/\D/g, '');
   return numericValue.replace(/(\d{3})(\d)/, '$1.$2')

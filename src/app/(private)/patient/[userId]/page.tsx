@@ -1,5 +1,5 @@
 import { db } from "@/drizzle";
-import { calculateAge } from "@/lib/formatters";
+import { calculateAge, calculateAgeWithOutMonths } from "@/lib/formatters";
 import {
   Card,
   CardHeader,
@@ -9,6 +9,11 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FilePlus, FileSearch } from "lucide-react";
+import SimplePrescription from "@/components/pdfgenerator/receita_simples";
+import { addWeeks } from "date-fns";
+import ExamRequest from "@/components/pdfgenerator/solicitação_exame";
+import AtestadoMedico from "@/components/pdfgenerator/atestado_medico";
+import EspecialPrescription from "@/components/pdfgenerator/receita_especial";
 
 export default async function PatientPage({
   params,
@@ -41,22 +46,124 @@ export default async function PatientPage({
           <FilePlus size={28} />
           <span>Relatório médico</span>
         </Button>
-        <Button>
-          <FilePlus size={28} />
-          <span>Receita simples</span>
-        </Button>
-        <Button>
-          <FilePlus size={28} />
-          <span>Receita controlada</span>
-        </Button>
-        <Button>
-          <FilePlus size={28} />
-          <span>Atestado médico</span>
-        </Button>
-        <Button>
-          <FilePlus size={28} />
-          <span>Pedido de exame</span>
-        </Button>
+
+        <SimplePrescription
+          patientName={patientInfo.name}
+          doctorName="Raquel de Jesus Fazekas"
+          crm="214876 - SP"
+          age={calculateAgeWithOutMonths(patientInfo.dateOfBirth.toISOString())}
+          gender={patientInfo.gender}
+          address={patientInfo.address || ""}
+          issuanceDate={new Date().toLocaleDateString()}
+          validityDate={addWeeks(new Date(), 1).toLocaleDateString()}
+          medications={[
+            {
+              name: "Tamiflu",
+              dosage: "75mg",
+              quantity: "10cp",
+              instructions: "Tomar 01cp de 12/12h por 05 dias",
+            },
+            {
+              name: "Paracetamol",
+              dosage: "500mg",
+              quantity: "20cp",
+              instructions: "Tomar 01cp de 6/6h se necessário",
+            },
+            {
+              name: "Buscopan Composto",
+              dosage: "250mg",
+              quantity: "10cp",
+              instructions: "Tomar 01cp de 6/6h se necessário",
+            },
+            {
+              name: "Neosoro",
+              dosage: "1000mg",
+              quantity: "15cp",
+              instructions: "Tomar 01cp de 6/6h se necessário",
+            },
+            {
+              name: "Salonpas ",
+              dosage: "100mg",
+              quantity: "16cp",
+              instructions: "Tomar 01cp de 6/6h se necessário",
+            },
+          ]}
+        />
+
+        <EspecialPrescription
+          patientName={patientInfo.name}
+          doctorName="Raquel de Jesus Fazekas"
+          crm="214876 - SP"
+          age={calculateAgeWithOutMonths(patientInfo.dateOfBirth.toISOString())}
+          gender={patientInfo.gender}
+          address={patientInfo.address || ""}
+          issuanceDate={new Date().toLocaleDateString()}
+          validityDate={addWeeks(new Date(), 1).toLocaleDateString()}
+          medications={[
+            {
+              name: "Tamiflu",
+              dosage: "75mg",
+              quantity: "10cp",
+              instructions: "Tomar 01cp de 12/12h por 05 dias",
+            },
+            {
+              name: "Paracetamol",
+              dosage: "500mg",
+              quantity: "20cp",
+              instructions: "Tomar 01cp de 6/6h se necessário",
+            },
+            {
+              name: "Buscopan Composto",
+              dosage: "250mg",
+              quantity: "10cp",
+              instructions: "Tomar 01cp de 6/6h se necessário",
+            },
+            {
+              name: "Neosoro",
+              dosage: "1000mg",
+              quantity: "15cp",
+              instructions: "Tomar 01cp de 6/6h se necessário",
+            },
+            {
+              name: "Salonpas ",
+              dosage: "100mg",
+              quantity: "16cp",
+              instructions: "Tomar 01cp de 6/6h se necessário",
+            },
+          ]}
+        />
+
+        <AtestadoMedico
+          patientName={patientInfo.name}
+          doctorName="Raquel de Jesus Fazekas"
+          crm="214876 - SP"
+          age={calculateAgeWithOutMonths(patientInfo.dateOfBirth.toISOString())}
+          gender={patientInfo.gender}
+          address={patientInfo.address || ""}
+          issuanceDate={new Date().toLocaleDateString()}
+          cid="B34.9"
+          texts={[
+            {
+              name: "teste de atestado médico, se o texto passar o comprimento da página ira quebrar para outra linha!! ",
+            },
+          ]}
+        />
+
+        <ExamRequest
+          patientName={patientInfo.name}
+          doctorName="Raquel de Jesus Fazekas"
+          crm="214876 - SP"
+          age={calculateAgeWithOutMonths(patientInfo.dateOfBirth.toISOString())}
+          gender={patientInfo.gender}
+          address={patientInfo.address || ""}
+          issuanceDate={new Date().toLocaleDateString()}
+          exams={[
+            {
+              name: "Raio-X panorâmico da coluna vertebral para escoliose, cifose e lordose com ângulo de Cobb e Ferguson.",
+            },
+          ]}
+        />
+
         <Button>
           <FileSearch size={28} />
           <span>Histórico</span>
