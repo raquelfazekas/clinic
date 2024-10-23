@@ -1,0 +1,1 @@
+ALTER TABLE "health_records" DROP COLUMN IF EXISTS "attachments[]";

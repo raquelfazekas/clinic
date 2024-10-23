@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import {
+  FileStack,
   MoreHorizontal,
   UserRoundPen,
   UserRoundSearch,
@@ -69,7 +70,15 @@ const ActionCell: React.FC<ActionCellProps> = ({ patient }) => {
             className="flex justify-between"
             onClick={() => router.push(`/patient/${patient.id}`)}
           >
-            Histórico
+            Documentos
+            <FileStack />
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            className="flex justify-between"
+            onClick={() => router.push(`/patient/records/${patient.id}`)}
+          >
+            Prontuarios
             <UserRoundSearch />
           </DropdownMenuItem>
           <DropdownMenuSeparator />

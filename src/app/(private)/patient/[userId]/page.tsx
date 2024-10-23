@@ -8,12 +8,13 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { FilePlus, FileSearch } from "lucide-react";
+import { FilePlus } from "lucide-react";
 import SimplePrescription from "@/components/pdfgenerator/receita_simples";
 import { addWeeks } from "date-fns";
 import ExamRequest from "@/components/pdfgenerator/solicitação_exame";
 import AtestadoMedico from "@/components/pdfgenerator/atestado_medico";
 import EspecialPrescription from "@/components/pdfgenerator/receita_especial";
+import Link from "next/link";
 
 export default async function PatientPage({
   params,
@@ -42,10 +43,12 @@ export default async function PatientPage({
         <div>Email: {patientInfo.email}</div>
       </CardContent>
       <CardFooter className="grid grid-cols-2 gap-2 md:grid-cols-4 lg:grid-cols-6">
-        <Button>
+        <Link href={`/patient/records/create/${patientInfo.id}`}>
+        <Button className="flex w-full">
           <FilePlus size={28} />
-          <span>Relatório médico</span>
+          <span>Prontuarios</span>
         </Button>
+        </Link>
 
         <SimplePrescription
           patientName={patientInfo.name}
@@ -163,11 +166,6 @@ export default async function PatientPage({
             },
           ]}
         />
-
-        <Button>
-          <FileSearch size={28} />
-          <span>Histórico</span>
-        </Button>
       </CardFooter>
     </Card>
   );

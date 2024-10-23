@@ -108,7 +108,6 @@ export const HealthRecordTable = pgTable("health_records", {
   visitDate: timestamp("visitDate").notNull(),
   notes: text("notes"),
   doctor: text("doctor").notNull(),
-  attachments: text("attachments[]"),
   createdAt,
 });
 

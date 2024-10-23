@@ -64,7 +64,7 @@ export default function EspecialPrescription({
 
     const contentStartY = 760 - logoHeight - 10;
 
-    // Título com linhas em volta
+    // Title with borders around
     page.drawLine({
       start: { x: 50, y: contentStartY + 110 },
       end: { x: 550, y: contentStartY + 110 },
@@ -92,8 +92,176 @@ export default function EspecialPrescription({
       thickness: 1,
     });
 
-    // Medication listing
-    let yPosition = contentStartY - 180;
+    // Doctor Information Box
+    const doctorBoxStartY = contentStartY + 75;
+    page.drawRectangle({
+      x: 50,
+      y: doctorBoxStartY - 120, 
+      width: 350,
+      height: 120,             
+      borderWidth: 1,
+      borderColor: rgb(0, 0, 0),
+    });
+    page.drawText("IDENTIFICAÇÃO DO EMITENTE", {
+      x: 60,
+      y: doctorBoxStartY - 20,
+      size: 10,
+      font: boldFont,
+    });
+    page.drawText(`Dr(a). ${doctorName}`, {
+      x: 60,
+      y: doctorBoxStartY - 35,
+      size: 12,
+      font: boldFont,
+      color: rgb(0, 0.5, 0),
+    });
+
+    page.drawText("CRM:", {
+      x: 60,
+      y: doctorBoxStartY - 53,
+      size: 10,
+      font: boldFont,
+    });
+    page.drawText(`${crm}`, {
+      x: 90,
+      y: doctorBoxStartY - 53,
+      size: 10,
+      font: timesRomanFont,
+    });
+
+    page.drawText("Endereço:", {
+      x: 60,
+      y: doctorBoxStartY - 73,
+      size: 8,
+      font: boldFont,
+    });
+    page.drawText(
+      "Rua Padre Timóteo Corrêa de Toledo, 259, Vila São José, Taubaté - SP",
+      {
+        x: 105,
+        y: doctorBoxStartY - 73,  
+        size: 8,
+        font: timesRomanFont,
+      }
+    );
+
+    page.drawText("Cidade:", {
+      x: 60,
+      y: doctorBoxStartY - 93,  
+      size: 8,
+      font: boldFont,
+    });
+    page.drawText("Taubaté", {
+      x: 95,
+      y: doctorBoxStartY - 93,  
+      size: 8,
+      font: timesRomanFont,
+    });
+
+    page.drawText("UF:", {
+      x: 200,
+      y: doctorBoxStartY - 93,
+      size: 8,
+      font: boldFont,
+    });
+    page.drawText("SP", {
+      x: 220,
+      y: doctorBoxStartY - 93,
+      size: 8,
+      font: timesRomanFont,
+    });
+
+    // Right-side information
+    page.drawText("Data de Emissão:", {
+      x: 410,
+      y: doctorBoxStartY - 20,
+      size: 10,
+      font: boldFont,
+    });
+    page.drawText(`${issuanceDate}`, {
+      x: 500,
+      y: doctorBoxStartY - 20,
+      size: 10,
+      font: timesRomanFont,
+    });
+
+    page.drawText("Data de Validade:", {
+      x: 410,
+      y: doctorBoxStartY - 35,
+      size: 10,
+      font: boldFont,
+    });
+    page.drawText(`${validityDate}`, {
+      x: 500,
+      y: doctorBoxStartY - 35,
+      size: 10,
+      font: timesRomanFont,
+    });
+    page.drawText(`1ª VIA FARMÁCIA`, {
+      x: 410,
+      y: doctorBoxStartY - 50,
+      size: 10,
+      font: boldFont,
+    });
+    page.drawText(`2ª VIA PACIENTE`, {
+      x: 410,
+      y: doctorBoxStartY - 65,
+      size: 10,
+      font: boldFont,
+    });
+
+    // Patient Information
+
+    const patientInfoStartY = doctorBoxStartY - 133;
+    page.drawText("Paciente:", {
+      x: 50,
+      y: patientInfoStartY - 5,
+      size: 10,
+      font: boldFont,
+    });
+    page.drawText(`Paciente: ${patientName}`, {
+      x: 100,
+      y: patientInfoStartY - 5,
+      size: 10,
+      font: timesRomanFont,
+    });
+
+    page.drawText("Endereço:", {
+      x: 50,
+      y: patientInfoStartY - 20,
+      size: 10,
+      font: boldFont,
+    });
+
+    page.drawText(`${address}`, {
+      x: 102,
+      y: patientInfoStartY - 20,
+      size: 10,
+      font: timesRomanFont,
+    });
+
+    page.drawText("Sexo:", {
+      x: 460,
+      y: patientInfoStartY - 20,
+      size: 10,
+      font: boldFont,
+    });
+
+    page.drawText(`${gender}`, {
+      x: 490,
+      y: patientInfoStartY - 20,
+      size: 10,
+      font: timesRomanFont,
+    });
+
+    page.drawLine({
+      start: { x: 50, y: patientInfoStartY - 50 },
+      end: { x: 550, y: patientInfoStartY - 50 },
+      thickness: 1.1,
+    });
+
+    // Medication listing (as per your current implementation)
+    let yPosition = patientInfoStartY - 80;
     medications.forEach((medication, index) => {
       const medicationText = `${index + 1}. ${medication.name} ${
         medication.dosage
@@ -137,6 +305,70 @@ export default function EspecialPrescription({
       });
       yPosition -= 30;
     });
+
+
+
+    const bottomY = 80;
+    const boxHeight = 60;
+
+    // Box 1: Comprador (Buyer)
+    page.drawRectangle({
+      x: 50,
+      y: bottomY - boxHeight,
+      width: 240,
+      height: boxHeight,
+      borderWidth: 1,
+      borderColor: rgb(0, 0, 0),
+    });
+    page.drawText("IDENTIFICAÇÃO DO COMPRADOR", {
+      x: 55,
+      y: bottomY - 15,
+      size: 8,
+      font: boldFont,
+    });
+    page.drawText("Nome: ___________________________________", {
+      x: 55,
+      y: bottomY - 32,
+      size: 8,
+      font: timesRomanFont,
+    });
+    page.drawText("Ident:____________________ Org. Emissor:__________", {
+      x: 55,
+      y: bottomY - 50,
+      size: 8,
+      font: timesRomanFont,
+    });
+
+    // Box 2: Fornecedor (Supplier)
+    page.drawRectangle({
+      x: 310,
+      y: bottomY - boxHeight,
+      width: 240,
+      height: boxHeight,
+      borderWidth: 1,
+      borderColor: rgb(0, 0, 0),
+    });
+    page.drawText("IDENTIFICAÇÃO DO FORNECEDOR", {
+      x: 315,
+      y: bottomY - 15,
+      size: 8,
+      font: boldFont,
+    });
+    page.drawText("ASSINATURA DO FARMACÊUTICO", {
+      x: 315,
+      y: bottomY - 32,
+      size: 8,
+      font: timesRomanFont,
+    });
+    page.drawText("DATA: ______/______/______", {
+      x: 315,
+      y: bottomY - 50,
+      size: 8,
+      font: timesRomanFont,
+    });
+
+
+
 
     // Save and download PDF
     const pdfBytes = await pdfDoc.save();

@@ -18,7 +18,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ArrowLeft, ArrowRight, Ban, UserRoundPlus } from "lucide-react";
+import { ArrowLeft, ArrowRight, Ban, FileSearch, UserRoundPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
@@ -74,7 +74,13 @@ export function DataTable<TData, TValue>({
             className="max-w-sm"
           />
         </div>
-        <div>
+        <div className="flex flex-row gap-4">
+        <Link href={"/patient/records"}>
+            <Button>
+              <FileSearch />
+              <span>Prontuarios</span>
+            </Button>
+          </Link>
           <Link href={"/patient/registration"}>
             <Button>
               <UserRoundPlus />
