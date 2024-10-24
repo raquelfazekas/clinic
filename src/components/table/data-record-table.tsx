@@ -35,9 +35,10 @@ interface PatientRecord {
 interface DataTableProps<TValue> {
   columns: ColumnDef<PatientRecord, TValue>[];
   data: PatientRecord[];
+  userId: string
 }
 
-export function DataTable<TValue>({ columns, data }: DataTableProps<TValue>) {
+export function DataTable<TValue>({ columns, data, userId }: DataTableProps<TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
   const table = useReactTable({
@@ -52,14 +53,12 @@ export function DataTable<TValue>({ columns, data }: DataTableProps<TValue>) {
     getFilteredRowModel: getFilteredRowModel(),
   });
 
-  console.log(data);
-
   return (
     <>
       <div className="flex flex-col md:flex-row py-4 justify-between gap-4">
         <div className="flex flex-col md:flex-row gap-4"></div>
         <div className="flex flex-row gap-4">
-          <Link href={`/patient/records/create/${data[0].patientId}`}>
+          <Link href={`/patient/records/create/${userId}`}>
             <Button>
               <UserRoundPlus />
               <span>Add Prontuário</span>

@@ -4,7 +4,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 export default async function CreateMedicalRecordsPage({
   params,
 }: {
-  params: { userId: string };
+  params: { pacientId: string };
 }) {
   return (
     <Card>
@@ -12,7 +12,7 @@ export default async function CreateMedicalRecordsPage({
         <CardTitle className="text-primary">Novo Prontuario</CardTitle>
       </CardHeader>
       <CardContent>
-        <MedicalRecordsForm defaultValues={{ patientId: params.userId }} />
+        <MedicalRecordsForm defaultValues={{ patientId: params.pacientId }} />
       </CardContent>
     </Card>
   );
