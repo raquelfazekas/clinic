@@ -111,6 +111,11 @@ export const HealthRecordTable = pgTable("health_records", {
   createdAt,
 });
 
+
+export type RecordSelect = InferSelectModel<typeof HealthRecordTable>;
+export type RecordInsert = InferInsertModel<typeof HealthRecordTable>;
+
+
 // --- Prescrição Eletrônica ---
 export const PrescriptionTable = pgTable("prescriptions", {
   id: uuid("id").primaryKey().defaultRandom(),

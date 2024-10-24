@@ -1,18 +1,19 @@
 import { DataTable } from "@/components/table/data-table-patient";
 import { columns } from "./columns";
 import { db } from "@/drizzle";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default async function PatientPage() {
-
-  const data = await db.query.PatientTable.findMany()
-
+  const data = await db.query.PatientTable.findMany();
 
   return (
-    <section className="py-10">
-      <div className="container">
-        <h1 className="text-3xl font-bold text-primary mb-4">Todos os pacientes</h1>
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-primary">Todos os pacientes</CardTitle>
+      </CardHeader>
+      <CardContent>
         <DataTable columns={columns} data={data} />
-      </div>
-    </section>
+      </CardContent>
+    </Card>
   );
 }

@@ -20,20 +20,24 @@ import {
 } from "@/components/ui/table";
 import { ArrowLeft, ArrowRight, Ban, UserRoundPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import { formatCPF } from "@/lib/formatters";
 import Link from "next/link";
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+interface PatientRecord {
+  id: string;
+  createdAt: Date;
+  patientId: string;
+  visitDate: Date;
+  notes: string | null;
+  doctor: string;
 }
 
-export function DataTable<TData, TValue>({
-  columns,
-  data,
-}: DataTableProps<TData, TValue>) {
+interface DataTableProps<TValue> {
+  columns: ColumnDef<PatientRecord, TValue>[];
+  data: PatientRecord[];
+}
+
+export function DataTable<TValue>({ columns, data }: DataTableProps<TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
   const table = useReactTable({
@@ -48,37 +52,17 @@ export function DataTable<TData, TValue>({
     getFilteredRowModel: getFilteredRowModel(),
   });
 
+  console.log(data);
+
   return (
     <>
       <div className="flex flex-col md:flex-row py-4 justify-between gap-4">
-        <div className="flex flex-col md:flex-row gap-4">
-          <Input
-            placeholder="Filtrar nomes..."
-            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-            onChange={(event) =>
-              table.getColumn("name")?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          />
-          <Input
-            placeholder="Filtrar CPF..."
-            value={(table.getColumn("cpf")?.getFilterValue() as string) ?? ""}
-            onChange={(event) => {
-              const inputValue = event.target.value;
-              if (inputValue.length >= 14) {
-                return;
-              }
-              const formattedValue = formatCPF(inputValue);
-              table.getColumn("cpf")?.setFilterValue(formattedValue);
-            }}
-            className="max-w-sm"
-          />
-        </div>
+        <div className="flex flex-col md:flex-row gap-4"></div>
         <div className="flex flex-row gap-4">
-          <Link href={"/patient/registration"}>
+          <Link href={`/patient/records/create/${data[0].patientId}`}>
             <Button>
               <UserRoundPlus />
-              <span>Add Paciente</span>
+              <span>Add Prontuário</span>
             </Button>
           </Link>
         </div>

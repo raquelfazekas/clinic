@@ -1,4 +1,5 @@
 import { PatientForm } from "@/components/form/PatientForm";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { db } from "@/drizzle";
 import { PatientInsert } from "@/drizzle/schema";
 
@@ -7,10 +8,10 @@ export default async function EditPatientPage({
 }: {
   params: { patientId: string };
 }) {
-
-  const patientInfo: PatientInsert | undefined = await db.query.PatientTable.findFirst({
-    where: (patient, { eq }) => eq(patient.id, params.patientId),
-  });
+  const patientInfo: PatientInsert | undefined =
+    await db.query.PatientTable.findFirst({
+      where: (patient, { eq }) => eq(patient.id, params.patientId),
+    });
 
   if (!patientInfo) {
     return <div>Patient not found</div>;
@@ -26,7 +27,7 @@ export default async function EditPatientPage({
     cpf: patientInfo.cpf,
     estado_civil: patientInfo.estado_civil,
     children: patientInfo.children ?? 0,
-    work: patientInfo.work || '',
+    work: patientInfo.work || "",
     education: patientInfo.education,
     origin: patientInfo.origin,
     religion: patientInfo.religion,
@@ -34,10 +35,14 @@ export default async function EditPatientPage({
     address: patientInfo.address || undefined,
   };
 
-
   return (
-    <div>
-      <PatientForm defaultValues={defaultValues} />
-    </div>
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-primary">Editar Paciente</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <PatientForm defaultValues={defaultValues} />
+      </CardContent>
+    </Card>
   );
 }

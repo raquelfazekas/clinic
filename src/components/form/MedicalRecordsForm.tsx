@@ -31,7 +31,7 @@
       id?: string;
       patientId: string;
       visitDate?: Date;
-      notes?: string;
+      notes?: string | null
       doctor?: string;
     };
   }
