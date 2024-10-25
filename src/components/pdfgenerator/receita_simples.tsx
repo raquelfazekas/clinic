@@ -3,7 +3,19 @@
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import { saveAs } from "file-saver";
 import { Button } from "../ui/button";
-import { FilePlus } from "lucide-react";
+import { FilePlus, Trash2 } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
+import { useState } from "react";
 
 interface PrescriptionProps {
   patientName: string;
@@ -14,12 +26,6 @@ interface PrescriptionProps {
   address: string;
   issuanceDate: string;
   validityDate: string;
-  medications: Array<{
-    name: string;
-    dosage: string;
-    quantity: string;
-    instructions: string;
-  }>;
 }
 
 export default function SimplePrescription({
@@ -31,8 +37,26 @@ export default function SimplePrescription({
   address,
   issuanceDate,
   validityDate,
-  medications,
 }: PrescriptionProps) {
+  const [medications, setMedications] = useState<
+    { name: string; dosage: string; quantity: string; instructions: string }[]
+  >([]);
+  const [newMedication, setNewMedication] = useState({
+    name: "",
+    dosage: "",
+    quantity: "",
+    instructions: "",
+  });
+
+  const handleAddMedication = () => {
+    setMedications([...medications, newMedication]);
+    setNewMedication({ name: "", dosage: "", quantity: "", instructions: "" });
+  };
+
+  const handleRemoveMedication = (index: number) => {
+    setMedications(medications.filter((_, i) => i !== index));
+  };
+
   async function generateSimplePrescription() {
     const pdfDoc = await PDFDocument.create();
 
@@ -50,7 +74,7 @@ export default function SimplePrescription({
     const logoImage = await pdfDoc.embedPng(logoImageBytes);
 
     const pageWidth = 600;
-    const logoWidth = 200;
+    const logoWidth = 150;
     const logoHeight = 100;
     const xCenteredLogo = (pageWidth - logoWidth) / 2;
 
@@ -194,7 +218,6 @@ export default function SimplePrescription({
       thickness: 1,
     });
 
-
     page.drawText("Data de validade:", {
       x: 400,
       y: contentStartY - 140,
@@ -258,14 +281,115 @@ export default function SimplePrescription({
     const pdfBytes = await pdfDoc.save();
     const blob = new Blob([pdfBytes], { type: "application/pdf" });
     saveAs(blob, "receita_simples.pdf");
+
+    setMedications([]);
+    setNewMedication({ name: "", dosage: "", quantity: "", instructions: "" });
   }
 
   return (
     <>
-      <Button onClick={generateSimplePrescription}>
-        <FilePlus size={28} />
-        <span>Receita simples</span>
-      </Button>
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button>
+            <FilePlus />
+            Receita Simples
+          </Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle className="text-primary">Adicionar Medicação</DialogTitle>
+            <DialogDescription>
+              Preencha as informações da medicação e clique em Adicionar.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="medication-name" className="text-right">
+                Nome
+              </Label>
+              <Input
+                id="medication-name"
+                value={newMedication.name}
+                onChange={(e) =>
+                  setNewMedication({ ...newMedication, name: e.target.value })
+                }
+                className="col-span-3"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="dosage" className="text-right">
+                Dosagem
+              </Label>
+              <Input
+                id="dosage"
+                value={newMedication.dosage}
+                onChange={(e) =>
+                  setNewMedication({ ...newMedication, dosage: e.target.value })
+                }
+                className="col-span-3"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="quantity" className="text-right">
+                Quantidade
+              </Label>
+              <Input
+                id="quantity"
+                value={newMedication.quantity}
+                onChange={(e) =>
+                  setNewMedication({
+                    ...newMedication,
+                    quantity: e.target.value,
+                  })
+                }
+                className="col-span-3"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="instructions" className="text-right">
+                Instruções
+              </Label>
+              <Input
+                id="instructions"
+                value={newMedication.instructions}
+                onChange={(e) =>
+                  setNewMedication({
+                    ...newMedication,
+                    instructions: e.target.value,
+                  })
+                }
+                className="col-span-3"
+              />
+            </div>
+          </div>
+
+          <div className="py-4">
+            <h3 className="text-lg font-semibold">Medicações Adicionadas:</h3>
+            <ul className="list-disc pl-5">
+              {medications.map((medication, index) => (
+                <li key={index} className="flex justify-between items-center mb-2">
+                  <span>
+                    {medication.name} - {medication.dosage} (x
+                    {medication.quantity})
+                  </span>
+                  <Button
+                    variant="destructive"
+                    className="ml-4"
+                    onClick={() => handleRemoveMedication(index)}
+                  >
+                    <Trash2 />
+                  </Button>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <DialogFooter>
+            <Button onClick={handleAddMedication}>Adicionar</Button>
+            <Button onClick={generateSimplePrescription}>Gerar PDF</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

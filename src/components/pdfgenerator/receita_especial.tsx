@@ -4,7 +4,19 @@
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import { saveAs } from "file-saver";
 import { Button } from "../ui/button";
-import { FilePlus } from "lucide-react";
+import { FilePlus, Trash2 } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
+import { useState } from "react";
 
 interface PrescriptionProps {
   patientName: string;
@@ -15,12 +27,6 @@ interface PrescriptionProps {
   address: string;
   issuanceDate: string;
   validityDate: string;
-  medications: Array<{
-    name: string;
-    dosage: string;
-    quantity: string;
-    instructions: string;
-  }>;
 }
 
 export default function EspecialPrescription({
@@ -32,8 +38,26 @@ export default function EspecialPrescription({
   address,
   issuanceDate,
   validityDate,
-  medications,
 }: PrescriptionProps) {
+  const [medications, setMedications] = useState<
+    { name: string; dosage: string; quantity: string; instructions: string }[]
+  >([]);
+  const [newMedication, setNewMedication] = useState({
+    name: "",
+    dosage: "",
+    quantity: "",
+    instructions: "",
+  });
+
+  const handleAddMedication = () => {
+    setMedications([...medications, newMedication]);
+    setNewMedication({ name: "", dosage: "", quantity: "", instructions: "" });
+  };
+
+  const handleRemoveMedication = (index: number) => {
+    setMedications(medications.filter((_, i) => i !== index));
+  };
+
   async function generateEspecialPrescription() {
     const pdfDoc = await PDFDocument.create();
 
@@ -51,13 +75,13 @@ export default function EspecialPrescription({
     const logoImage = await pdfDoc.embedPng(logoImageBytes);
 
     const pageWidth = 600;
-    const logoWidth = 200;
+    const logoWidth = 150;
     const logoHeight = 100;
     const xCenteredLogo = (pageWidth - logoWidth) / 2;
 
     page.drawImage(logoImage, {
       x: xCenteredLogo,
-      y: 760,
+      y: 750,
       width: logoWidth,
       height: logoHeight,
     });
@@ -96,9 +120,9 @@ export default function EspecialPrescription({
     const doctorBoxStartY = contentStartY + 75;
     page.drawRectangle({
       x: 50,
-      y: doctorBoxStartY - 120, 
+      y: doctorBoxStartY - 120,
       width: 350,
-      height: 120,             
+      height: 120,
       borderWidth: 1,
       borderColor: rgb(0, 0, 0),
     });
@@ -139,7 +163,7 @@ export default function EspecialPrescription({
       "Rua Padre Timóteo Corrêa de Toledo, 259, Vila São José, Taubaté - SP",
       {
         x: 105,
-        y: doctorBoxStartY - 73,  
+        y: doctorBoxStartY - 73,
         size: 8,
         font: timesRomanFont,
       }
@@ -147,13 +171,13 @@ export default function EspecialPrescription({
 
     page.drawText("Cidade:", {
       x: 60,
-      y: doctorBoxStartY - 93,  
+      y: doctorBoxStartY - 93,
       size: 8,
       font: boldFont,
     });
     page.drawText("Taubaté", {
       x: 95,
-      y: doctorBoxStartY - 93,  
+      y: doctorBoxStartY - 93,
       size: 8,
       font: timesRomanFont,
     });
@@ -219,7 +243,7 @@ export default function EspecialPrescription({
       size: 10,
       font: boldFont,
     });
-    page.drawText(`Paciente: ${patientName}`, {
+    page.drawText(`${patientName}`, {
       x: 100,
       y: patientInfoStartY - 5,
       size: 10,
@@ -306,12 +330,10 @@ export default function EspecialPrescription({
       yPosition -= 30;
     });
 
+    const bottomY = 150;
+    const boxHeight = 125;
 
-
-    const bottomY = 80;
-    const boxHeight = 60;
-
-    // Box 1: Comprador (Buyer)
+    // Box 1: Comprador
     page.drawRectangle({
       x: 50,
       y: bottomY - boxHeight,
@@ -321,25 +343,43 @@ export default function EspecialPrescription({
       borderColor: rgb(0, 0, 0),
     });
     page.drawText("IDENTIFICAÇÃO DO COMPRADOR", {
-      x: 55,
+      x: 100,
       y: bottomY - 15,
       size: 8,
       font: boldFont,
     });
-    page.drawText("Nome: ___________________________________", {
+    page.drawText("Nome: ______________________________________________", {
       x: 55,
-      y: bottomY - 32,
+      y: bottomY - 37,
       size: 8,
       font: timesRomanFont,
     });
-    page.drawText("Ident:____________________ Org. Emissor:__________", {
+    page.drawText("Ident:__________________________ Org. Emissor:_________", {
       x: 55,
-      y: bottomY - 50,
+      y: bottomY - 55,
+      size: 8,
+      font: timesRomanFont,
+    });
+    page.drawText("End:________________________________________________", {
+      x: 55,
+      y: bottomY - 73,
+      size: 8,
+      font: timesRomanFont,
+    });
+    page.drawText("Cidade:________________________________UF:__________", {
+      x: 55,
+      y: bottomY - 91,
+      size: 8,
+      font: timesRomanFont,
+    });
+    page.drawText("tel:_________________________________________________", {
+      x: 55,
+      y: bottomY - 109,
       size: 8,
       font: timesRomanFont,
     });
 
-    // Box 2: Fornecedor (Supplier)
+    // Box 2: Fornecedor
     page.drawRectangle({
       x: 310,
       y: bottomY - boxHeight,
@@ -349,16 +389,10 @@ export default function EspecialPrescription({
       borderColor: rgb(0, 0, 0),
     });
     page.drawText("IDENTIFICAÇÃO DO FORNECEDOR", {
-      x: 315,
+      x: 360,
       y: bottomY - 15,
       size: 8,
       font: boldFont,
-    });
-    page.drawText("ASSINATURA DO FARMACÊUTICO", {
-      x: 315,
-      y: bottomY - 32,
-      size: 8,
-      font: timesRomanFont,
     });
     page.drawText("DATA: ______/______/______", {
       x: 315,
@@ -366,22 +400,133 @@ export default function EspecialPrescription({
       size: 8,
       font: timesRomanFont,
     });
+    page.drawText("___________________________________________________", {
+      x: 315,
+      y: bottomY - 95,
+      size: 8,
+      font: timesRomanFont,
+    });
 
-
-
+    page.drawText("ASSINATURA DO FARMACÊUTICO", {
+      x: 368,
+      y: bottomY - 109,
+      size: 8,
+      font: timesRomanFont,
+    });
 
     // Save and download PDF
     const pdfBytes = await pdfDoc.save();
     const blob = new Blob([pdfBytes], { type: "application/pdf" });
     saveAs(blob, `Receita_Controlada_${patientName}`);
+
+    setMedications([]);
+    setNewMedication({ name: "", dosage: "", quantity: "", instructions: "" });
   }
 
   return (
     <>
-      <Button onClick={generateEspecialPrescription}>
-        <FilePlus size={28} />
-        <span>Receita controlada</span>
-      </Button>
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button>
+            <FilePlus />
+            Receita controlada
+          </Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle className="text-primary">Adicionar Medicação</DialogTitle>
+            <DialogDescription>
+              Preencha as informações da medicação e clique em Adicionar.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="medication-name" className="text-right">
+                Nome
+              </Label>
+              <Input
+                id="medication-name"
+                value={newMedication.name}
+                onChange={(e) =>
+                  setNewMedication({ ...newMedication, name: e.target.value })
+                }
+                className="col-span-3"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="dosage" className="text-right">
+                Dosagem
+              </Label>
+              <Input
+                id="dosage"
+                value={newMedication.dosage}
+                onChange={(e) =>
+                  setNewMedication({ ...newMedication, dosage: e.target.value })
+                }
+                className="col-span-3"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="quantity" className="text-right">
+                Quantidade
+              </Label>
+              <Input
+                id="quantity"
+                value={newMedication.quantity}
+                onChange={(e) =>
+                  setNewMedication({
+                    ...newMedication,
+                    quantity: e.target.value,
+                  })
+                }
+                className="col-span-3"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="instructions" className="text-right">
+                Instruções
+              </Label>
+              <Input
+                id="instructions"
+                value={newMedication.instructions}
+                onChange={(e) =>
+                  setNewMedication({
+                    ...newMedication,
+                    instructions: e.target.value,
+                  })
+                }
+                className="col-span-3"
+              />
+            </div>
+          </div>
+
+          <div className="py-4">
+            <h3 className="text-lg font-semibold">Medicações Adicionadas:</h3>
+            <ul className="list-disc pl-5">
+              {medications.map((medication, index) => (
+                <li key={index} className="flex justify-between items-center mb-2">
+                  <span>
+                    {medication.name} - {medication.dosage} (x
+                    {medication.quantity})
+                  </span>
+                  <Button
+                    variant="destructive"
+                    className="ml-4"
+                    onClick={() => handleRemoveMedication(index)}
+                  >
+                    <Trash2 />
+                  </Button>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <DialogFooter>
+            <Button onClick={handleAddMedication}>Adicionar</Button>
+            <Button onClick={generateEspecialPrescription}>Gerar PDF</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

@@ -3,7 +3,19 @@
 import { PDFDocument, PDFFont, PDFPage, StandardFonts, rgb } from "pdf-lib";
 import { saveAs } from "file-saver";
 import { Button } from "../ui/button";
-import { FilePlus } from "lucide-react";
+import { FilePlus, Trash2 } from "lucide-react";
+import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
 
 interface PrescriptionProps {
   patientName: string;
@@ -13,9 +25,6 @@ interface PrescriptionProps {
   gender: string;
   address: string;
   issuanceDate: string;
-  exams: Array<{
-    name: string;
-  }>;
 }
 
 export default function ExamRequest({
@@ -26,8 +35,21 @@ export default function ExamRequest({
   gender,
   address,
   issuanceDate,
-  exams,
 }: PrescriptionProps) {
+  const [texts, setTexts] = useState<{ text: string }[]>([]);
+  const [newText, setNewText] = useState("");
+
+  const handleAddMedication = () => {
+    if (newText) {
+      setTexts([...texts, { text: newText }]);
+      setNewText("");
+    }
+  };
+
+  const handleRemoveMedication = (index: number) => {
+    setTexts(texts.filter((_, i) => i !== index));
+  };
+
   async function generateExamRequest() {
     const pdfDoc = await PDFDocument.create();
 
@@ -45,7 +67,7 @@ export default function ExamRequest({
     const logoImage = await pdfDoc.embedPng(logoImageBytes);
 
     const pageWidth = 600;
-    const logoWidth = 200;
+    const logoWidth = 150;
     const logoHeight = 100;
     const xCenteredLogo = (pageWidth - logoWidth) / 2;
 
@@ -72,7 +94,7 @@ export default function ExamRequest({
     const title = "SOLICITAÇÃO DE EXAME";
     const titleWidth = boldFont.widthOfTextAtSize(title, 14);
     const titleX = (pageWidth - titleWidth) / 2; // calcular a posição X centralizada
-    
+
     page.drawText(title, {
       x: titleX,
       y: 730,
@@ -90,7 +112,7 @@ export default function ExamRequest({
       thickness: 1,
     });
 
-    // Medical information
+    // Informações médicas
     page.drawText("RJF - Medicina e Saúde Mental", {
       x: 50,
       y: contentStartY,
@@ -125,8 +147,7 @@ export default function ExamRequest({
       font: boldFont,
     });
 
-    // Issuance and validity dates
-
+    // Data de emissão
     page.drawText("Data de emissão:", {
       x: 400,
       y: contentStartY,
@@ -140,7 +161,7 @@ export default function ExamRequest({
       font: timesRomanFont,
     });
 
-    // Patient information
+    // Informações do paciente
     page.drawLine({
       start: { x: 50, y: contentStartY - 80 },
       end: { x: 550, y: contentStartY - 80 },
@@ -193,71 +214,129 @@ export default function ExamRequest({
       thickness: 1,
     });
 
-
-
     page.drawText("Solicito:", {
-        x: 50,
-        y: contentStartY - 150,
-        size: 12,
-        font: boldFont,
-      });
+      x: 50,
+      y: contentStartY - 150,
+      size: 12,
+      font: boldFont,
+    });
 
+    // Adicionando exames na lista
+    let currentYPosition = contentStartY - 180;
+    texts.forEach((text, index) => {
+      const examText = `${index + 1}. ${text.text}`;
+      drawTextWithWrap(page, examText, 60, currentYPosition, boldFont, 10, 500);
+      currentYPosition -= 20;
+    });
 
-      const yPosition = contentStartY - 180;
-      exams.forEach((exam, index) => {
-        const examText = `${index + 1}. ${exam.name}`;
-        drawTextWithWrap(page, examText, 50, yPosition, boldFont, 10, 500);
-      });
-
-    // Save and download PDF
+    // Salvar e baixar o PDF
     const pdfBytes = await pdfDoc.save();
     const blob = new Blob([pdfBytes], { type: "application/pdf" });
     saveAs(blob, `Solicitação_exame_${patientName}.pdf`);
+
+    setNewText("");
+    setTexts([]);
   }
 
   return (
     <>
-      <Button onClick={generateExamRequest}>
-        <FilePlus size={28} />
-        <span>Solicitação Exame</span>
-      </Button>
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button>
+            <FilePlus />
+            Solicitação exame
+          </Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle className="text-primary">Adicionar Exame</DialogTitle>
+            <DialogDescription>
+              Preencha as informações do exame e clique em Adicionar.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4 mt-4">
+              <Label htmlFor="reasonDescription" className="text-right">
+                Exame
+              </Label>
+              <Input
+                id="reasonDescription"
+                value={newText}
+                onChange={(e) => setNewText(e.target.value)}
+                className="col-span-3"
+                placeholder="Digite o nome do exame"
+              />
+            </div>
+          </div>
+
+          <div className="py-4">
+            <h3 className="text-lg font-semibold">Exames Adicionados:</h3>
+            <ul className="list-disc pl-5">
+              {texts.map((reason, index) => (
+                <li
+                  key={index}
+                  className="flex justify-between items-center mb-2"
+                >
+                  <span>{reason.text}</span>
+                  <Button
+                    variant="destructive"
+                    className="ml-4"
+                    onClick={() => handleRemoveMedication(index)}
+                  >
+                    <Trash2 />
+                  </Button>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <DialogFooter>
+            <Button onClick={handleAddMedication}>Adicionar Exame</Button>
+            <Button onClick={generateExamRequest}>Gerar PDF</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
 
+function drawTextWithWrap(
+  page: PDFPage,
+  text: string,
+  x: number,
+  y: number,
+  font: PDFFont,
+  size: number,
+  maxWidth: number
+) {
+  const words = text.split(" ");
+  let line = "";
+  const lineHeight = size * 1.2; // ajuste conforme necessário
+  let yOffset = 0;
 
+  for (const word of words) {
+    const testLine = line + word + " ";
+    const testWidth = font.widthOfTextAtSize(testLine, size);
 
-
-function drawTextWithWrap(page: PDFPage, text: string, x: number, y: number, font: PDFFont, size: number, maxWidth: number) {
-    const words = text.split(' ');
-    let line = '';
-    const lineHeight = size * 1.2; // ajuste conforme necessário
-    let yOffset = 0;
-  
-    for (const word of words) {
-      const testLine = line + word + ' ';
-      const testWidth = font.widthOfTextAtSize(testLine, size);
-  
-      if (testWidth > maxWidth) {
-        page.drawText(line, {
-          x,
-          y: y - yOffset,
-          size,
-          font,
-        });
-        line = word + ' ';
-        yOffset += lineHeight; // move para a próxima linha
-      } else {
-        line = testLine;
-      }
+    if (testWidth > maxWidth) {
+      page.drawText(line, {
+        x,
+        y: y - yOffset,
+        size,
+        font,
+      });
+      line = word + " ";
+      yOffset += lineHeight; // move para a próxima linha
+    } else {
+      line = testLine;
     }
-    
-    // Desenha a última linha
-    page.drawText(line, {
-      x,
-      y: y - yOffset,
-      size,
-      font,
-    });
   }
-  
+
+  // Desenha a última linha
+  page.drawText(line, {
+    x,
+    y: y - yOffset,
+    size,
+    font,
+  });
+}
