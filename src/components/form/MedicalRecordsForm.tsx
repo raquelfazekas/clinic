@@ -34,9 +34,7 @@ export interface HealthRecordFormProps {
   };
 }
 
-export function MedicalRecordsForm(
-  { defaultValues }: HealthRecordFormProps,
-) {
+export function MedicalRecordsForm({ defaultValues }: HealthRecordFormProps) {
   const { toast } = useToast();
   const router = useRouter();
   const { user } = useUser();
@@ -57,10 +55,11 @@ export function MedicalRecordsForm(
     }
   }, [user?.fullName, form]);
 
+  console.log(form.formState.errors)
+
+
   async function onSubmit(values: z.infer<typeof healthRecordTableSchema>) {
     let res;
-
-    console.log("hello")
 
     if (defaultValues?.id) {
       res = await updateMedicalRecords(values, defaultValues.id);
@@ -68,7 +67,6 @@ export function MedicalRecordsForm(
       res = await createMedicalRecords(values);
     }
 
-    // Check for success or error response
     if (res?.error) {
       toast({
         title: "Erro",
@@ -83,8 +81,6 @@ export function MedicalRecordsForm(
         ? "Prontuário atualizado com sucesso!"
         : "Prontuário criado com sucesso!",
     });
-
-  
 
     router.push(`/patient/records/${defaultValues?.patientId}`);
   }
@@ -154,7 +150,7 @@ export function MedicalRecordsForm(
         />
 
         <div className="flex gap-2 justify-end">
-          <Button disabled={form.formState.isSubmitting} type="submit">
+          <Button  type="submit">
             {defaultValues?.id ? "Atualizar Prontuário" : "Criar Prontuário"}
           </Button>
         </div>

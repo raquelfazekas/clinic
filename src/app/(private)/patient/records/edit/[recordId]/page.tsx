@@ -11,10 +11,10 @@ export default async function editMedicalRecordPage({
     where: ({ id }, { eq }) => eq(id, params.recordId),
   });
 
-  // Ensure the record is found and include the recordId in defaultValues
   if (!record) {
-    return <div>Registro não encontrado.</div>; // Handle case where the record does not exist
+    return <div>Registro não encontrado.</div>;
   }
+
 
   return (
     <Card>
@@ -23,10 +23,7 @@ export default async function editMedicalRecordPage({
       </CardHeader>
       <CardContent>
         <MedicalRecordsForm
-          defaultValues={{
-            ...record,
-            id: params.recordId,
-          }}
+          defaultValues={record}
         />
       </CardContent>
     </Card>
