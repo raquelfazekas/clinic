@@ -1,7 +1,6 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { RecordSelect } from "@/drizzle/schema";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,10 +24,19 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useState, startTransition } from "react";
 import { useRouter } from "next/navigation";
-import { deleteMedicalRecords } from "@/server/actions/medicalRecords";
+import { PrescriptionRecord } from "./page";
+import { deletePrescriptionRecords } from "@/server/actions/prescription";
+import generateEspecialPrescription from "@/components/pdfPreview/ReceitaEspecial"
 
 interface ActionCellProps {
-  record: RecordSelect;
+  record: PrescriptionRecord;
+}
+
+interface Medication {
+  name: string;
+  dosage: string;
+  quantity: string;
+  instructions: string;
 }
 
 const ActionCell: React.FC<ActionCellProps> = ({ record }) => {
@@ -41,7 +49,7 @@ const ActionCell: React.FC<ActionCellProps> = ({ record }) => {
       setLoading(true);
     });
 
-    const result = await deleteMedicalRecords(id);
+    const result = await deletePrescriptionRecords(id);
 
     setLoading(false);
     setOpenAlert(false);
@@ -50,6 +58,36 @@ const ActionCell: React.FC<ActionCellProps> = ({ record }) => {
       router.refresh();
     }
   };
+
+
+  const handlePdfGeneration = async (record: PrescriptionRecord) => {
+    const patientName = record.patient.name;
+    const doctorName = "Raquel de Jesus Fazekas";
+    const crm = "214876 - SP";
+    const gender = "Masculino";
+    const address = record.patient.name
+    const issuanceDate = new Date().toLocaleDateString("pt-BR");
+    const validityDate = "12/12/2024";
+  
+    const pdfBytes = await generateEspecialPrescription({
+      patientName,
+      doctorName,
+      crm,
+      gender,
+      address,
+      issuanceDate,
+      validityDate,
+      medications: record.medications as Medication[],
+    });
+  
+    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+    const url = URL.createObjectURL(blob);
+  
+    window.open(url);
+  };
+  
+
+
   return (
     <>
       <DropdownMenu>
@@ -66,7 +104,15 @@ const ActionCell: React.FC<ActionCellProps> = ({ record }) => {
             className="flex justify-between"
             onClick={() => router.push(`/patient/records/edit/${record.id}`)}
           >
-            Editar
+            Visualizar
+            <UserRoundPen />
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            className="flex justify-between"
+            onClick={() => handlePdfGeneration(record)}
+          >
+            PDF
             <UserRoundPen />
           </DropdownMenuItem>
           <DropdownMenuSeparator />
@@ -110,7 +156,7 @@ const ActionCell: React.FC<ActionCellProps> = ({ record }) => {
   );
 };
 
-export const columns: ColumnDef<RecordSelect>[] = [
+export const columns: ColumnDef<PrescriptionRecord>[] = [
   {
     accessorKey: "patient.name",
     header: "Paciente",
@@ -128,6 +174,10 @@ export const columns: ColumnDef<RecordSelect>[] = [
         minute: "2-digit",
       });
     },
+  },
+  {
+    accessorKey: "type",
+    header: "Tipo",
   },
   {
     id: "actions",

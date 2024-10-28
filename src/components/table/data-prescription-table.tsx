@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import {
@@ -18,31 +19,22 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ArrowLeft, ArrowRight, Ban, UserRoundPlus } from "lucide-react";
+import { ArrowLeft, ArrowRight, Ban } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import Link from "next/link";
+import { PrescriptionRecord } from "@/app/(private)/patient/prescriptions/[patientId]/page";
 
-interface PatientRecord {
-  id: string;
-  createdAt: Date;
-  type: string;
-  patientId: string;
-  visitDate: Date;
-  notes: string | null;
-  doctor: string;
-}
 
 interface DataTableProps<TValue> {
-  columns: ColumnDef<PatientRecord, TValue>[];
-  data: PatientRecord[];
-  userId: string
+  columns: ColumnDef<PrescriptionRecord, TValue>[];
+  data: PrescriptionRecord[];
+  userId: string;
 }
 
 export function DataTable<TValue>({ columns, data, userId }: DataTableProps<TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
-  const table = useReactTable({
+  const table = useReactTable<PrescriptionRecord>({
     data,
     columns,
     state: {
@@ -56,64 +48,38 @@ export function DataTable<TValue>({ columns, data, userId }: DataTableProps<TVal
 
   return (
     <>
-      <div className="flex flex-col md:flex-row py-4 justify-between gap-4">
-        <div className="flex flex-col md:flex-row gap-4"></div>
-        <div className="flex flex-row gap-4">
-          <Link href={`/patient/records/create/${userId}`}>
-            <Button>
-              <UserRoundPlus />
-              <span>Add Prontuário</span>
-            </Button>
-          </Link>
-        </div>
-      </div>
-
-      <div className="rounded-md border">
+      <div className="rounded-md border mt-5">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(header.column.columnDef.header, header.getContext())}
+                  </TableHead>
+                ))}
               </TableRow>
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
+                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  <div className="flex flex-row w-full h-full justify-center items-center gap-3">
+                <TableCell colSpan={columns.length} className="h-24 text-center">
+                  <div className="flex w-full h-full justify-center items-center gap-3">
                     <span>Sem resultados</span>
-                    <Ban className="size-6 text-red-600" />
+                    <Ban className="w-6 h-6 text-red-600" />
                   </div>
                 </TableCell>
               </TableRow>
@@ -124,8 +90,7 @@ export function DataTable<TValue>({ columns, data, userId }: DataTableProps<TVal
 
       <div className="flex items-center justify-end space-x-2 py-4">
         <div className="flex w-[100px] items-center justify-center text-sm font-medium">
-          Página {table.getState().pagination.pageIndex + 1} de{" "}
-          {table.getPageCount()}
+          Página {table.getState().pagination.pageIndex + 1} de {table.getPageCount()}
         </div>
         <Button
           variant="outline"
@@ -133,7 +98,7 @@ export function DataTable<TValue>({ columns, data, userId }: DataTableProps<TVal
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
         >
-          <ArrowLeft className="size-10 text-primary" />
+          <ArrowLeft className="w-4 h-4 text-primary" />
         </Button>
         <Button
           variant="outline"
@@ -141,7 +106,7 @@ export function DataTable<TValue>({ columns, data, userId }: DataTableProps<TVal
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
         >
-          <ArrowRight className="size-10 text-primary" />
+          <ArrowRight className="w-4 h-4 text-primary" />
         </Button>
       </div>
     </>

@@ -24,7 +24,7 @@ import {
 import { useUser } from "@clerk/nextjs";
 import TextEditor from "../Text_editor";
 
-export interface HealthRecordFormProps {
+export interface HealthReportsFormProps {
   defaultValues?: {
     id?: string;
     patientId: string;
@@ -34,7 +34,7 @@ export interface HealthRecordFormProps {
   };
 }
 
-export function MedicalRecordsForm({ defaultValues }: HealthRecordFormProps) {
+export function MedicalReportsForm({ defaultValues }: HealthReportsFormProps) {
   const { toast } = useToast();
   const router = useRouter();
   const { user } = useUser();
@@ -55,20 +55,19 @@ export function MedicalRecordsForm({ defaultValues }: HealthRecordFormProps) {
     }
   }, [user?.fullName, form]);
 
-
   async function onSubmit(values: z.infer<typeof healthRecordTableSchema>) {
     let res;
 
     if (defaultValues?.id) {
       res = await updateMedicalRecords(values, defaultValues.id);
     } else {
-      res = await createMedicalRecords(values, "PRO");
+      res = await createMedicalRecords(values, "RLM");
     }
 
     if (res?.error) {
       toast({
         title: "Erro",
-        description: "Erro ao salvar prontuário",
+        description: "Erro ao salvar Relatório Médico",
       });
       return;
     }
@@ -76,11 +75,11 @@ export function MedicalRecordsForm({ defaultValues }: HealthRecordFormProps) {
     toast({
       title: "Success",
       description: defaultValues?.id
-        ? "Prontuário atualizado com sucesso!"
-        : "Prontuário criado com sucesso!",
+        ? "Relatório Médico atualizado com sucesso!"
+        : "Relatório Médico criado com sucesso!",
     });
 
-    router.push(`/patient/records/${defaultValues?.patientId}`);
+    router.push(`/patient/reports/${defaultValues?.patientId}`);
   }
 
   return (
@@ -148,8 +147,10 @@ export function MedicalRecordsForm({ defaultValues }: HealthRecordFormProps) {
         />
 
         <div className="flex gap-2 justify-end">
-          <Button  type="submit">
-            {defaultValues?.id ? "Atualizar Prontuário" : "Criar Prontuário"}
+          <Button type="submit">
+            {defaultValues?.id
+              ? "Atualizar Relatório Médico"
+              : "Criar Relatório Médico"}
           </Button>
         </div>
       </form>

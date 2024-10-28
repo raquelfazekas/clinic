@@ -50,6 +50,7 @@ const ActionCell: React.FC<ActionCellProps> = ({ record }) => {
       router.refresh();
     }
   };
+
   return (
     <>
       <DropdownMenu>
@@ -64,7 +65,7 @@ const ActionCell: React.FC<ActionCellProps> = ({ record }) => {
           <DropdownMenuSeparator />
           <DropdownMenuItem
             className="flex justify-between"
-            onClick={() => router.push(`/patient/records/edit/${record.id}`)}
+            onClick={() => router.push(`/patient/reports/edit/${record.id}`)}
           >
             Editar
             <UserRoundPen />
@@ -89,7 +90,7 @@ const ActionCell: React.FC<ActionCellProps> = ({ record }) => {
             <AlertDialogTitle>Você tem certeza?</AlertDialogTitle>
             <AlertDialogDescription>
               Esta ação não pode ser desfeita. Isso excluirá permanentemente o
-              Prontuário.
+              Relatório Médico.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

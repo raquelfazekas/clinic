@@ -16,9 +16,11 @@ import {
 } from "../ui/dialog";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
+import { createPrescriptionRecord } from "@/server/actions/prescription";
 
 interface PrescriptionProps {
   patientName: string;
+  patientId: string;
   doctorName: string;
   crm: string;
   age: string;
@@ -29,6 +31,7 @@ interface PrescriptionProps {
 
 export default function ExamRequest({
   patientName,
+  patientId,
   doctorName,
   crm,
   age,
@@ -49,6 +52,11 @@ export default function ExamRequest({
   const handleRemoveMedication = (index: number) => {
     setTexts(texts.filter((_, i) => i !== index));
   };
+
+  async function handlePdfGeneration() {
+    generateExamRequest();
+    createPrescriptionRecord("SE", texts, patientId, doctorName);
+  }
 
   async function generateExamRequest() {
     const pdfDoc = await PDFDocument.create();
@@ -292,7 +300,7 @@ export default function ExamRequest({
 
           <DialogFooter>
             <Button onClick={handleAddMedication}>Adicionar Exame</Button>
-            <Button onClick={generateExamRequest}>Gerar PDF</Button>
+            <Button onClick={handlePdfGeneration}>Gerar PDF</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

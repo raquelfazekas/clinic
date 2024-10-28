@@ -7,14 +7,14 @@ import {
   CardTitle,
   CardFooter,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { FilePlus } from "lucide-react";
 import SimplePrescription from "@/components/pdfgenerator/receita_simples";
 import { addWeeks } from "date-fns";
 import ExamRequest from "@/components/pdfgenerator/solicitação_exame";
 import AtestadoMedico from "@/components/pdfgenerator/atestado_medico";
 import EspecialPrescription from "@/components/pdfgenerator/receita_especial";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Archive } from "lucide-react";
 
 export default async function PatientPage({
   params,
@@ -43,15 +43,9 @@ export default async function PatientPage({
         <div>Email: {patientInfo.email}</div>
       </CardContent>
       <CardFooter className="grid grid-cols-2 gap-2 md:grid-cols-4 lg:grid-cols-6">
-        <Link href={`/patient/records/create/${patientInfo.id}`}>
-          <Button className="flex w-full">
-            <FilePlus size={28} />
-            <span>Prontuarios</span>
-          </Button>
-        </Link>
-
         <SimplePrescription
           patientName={patientInfo.name}
+          patientId={patientInfo.id}
           doctorName="Raquel de Jesus Fazekas"
           crm="214876 - SP"
           age={calculateAgeWithOutMonths(patientInfo.dateOfBirth.toISOString())}
@@ -63,6 +57,7 @@ export default async function PatientPage({
 
         <EspecialPrescription
           patientName={patientInfo.name}
+          patientId={patientInfo.id}
           doctorName="Raquel de Jesus Fazekas"
           crm="214876 - SP"
           age={calculateAgeWithOutMonths(patientInfo.dateOfBirth.toISOString())}
@@ -74,6 +69,7 @@ export default async function PatientPage({
 
         <AtestadoMedico
           patientName={patientInfo.name}
+          patientId={patientInfo.id}
           doctorName="Raquel de Jesus Fazekas"
           crm="214876 - SP"
           age={calculateAgeWithOutMonths(patientInfo.dateOfBirth.toISOString())}
@@ -84,6 +80,7 @@ export default async function PatientPage({
 
         <ExamRequest
           patientName={patientInfo.name}
+          patientId={patientInfo.id}
           doctorName="Raquel de Jesus Fazekas"
           crm="214876 - SP"
           age={calculateAgeWithOutMonths(patientInfo.dateOfBirth.toISOString())}
@@ -91,6 +88,14 @@ export default async function PatientPage({
           address={patientInfo.address || ""}
           issuanceDate={new Date().toLocaleDateString()}
         />
+
+          <Link href={`/patient/prescriptions/${patientInfo.id}`}>
+            <Button className="w-full">
+              <Archive />
+               Histórico
+            </Button>
+          </Link>
+
       </CardFooter>
     </Card>
   );

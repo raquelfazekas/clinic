@@ -16,10 +16,12 @@ import {
 } from "../ui/dialog";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
+import { createPrescriptionRecord } from "@/server/actions/prescription";
 
 interface PrescriptionProps {
   patientName: string;
   doctorName: string;
+  patientId: string;
   crm: string;
   age: string;
   gender: string;
@@ -30,19 +32,20 @@ interface PrescriptionProps {
 export default function AtestadoMedico({
   patientName,
   doctorName,
+  patientId,
   crm,
   age,
   gender,
   address,
   issuanceDate,
 }: PrescriptionProps) {
-  const [texts, setTexts] = useState<{ text: string }[]>([]);
+  const [texts, setTexts] = useState<{ text: string; cid: string }[]>([]);
   const [newText, setNewText] = useState("");
   const [cid, setCid] = useState("");
 
   const handleAddTexts = () => {
     if (newText && cid) {
-      setTexts([...texts, { text: newText }]);
+      setTexts([...texts, { text: newText, cid }]);
       setNewText("");
     }
   };
@@ -50,6 +53,11 @@ export default function AtestadoMedico({
   const handleRemoveText = (index: number) => {
     setTexts(texts.filter((_, i) => i !== index));
   };
+
+  async function handlePdfGeneration() {
+    generateAtestadoMedico();
+    createPrescriptionRecord("ATM", texts, patientId, doctorName);
+  }
 
   async function generateAtestadoMedico() {
     const pdfDoc = await PDFDocument.create();
@@ -302,7 +310,7 @@ export default function AtestadoMedico({
 
           <DialogFooter>
             <Button onClick={handleAddTexts}>Adicionar Motivo</Button>
-            <Button onClick={generateAtestadoMedico}>Gerar PDF</Button>
+            <Button onClick={handlePdfGeneration}>Gerar PDF</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

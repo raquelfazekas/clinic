@@ -5,36 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1729186277362,
-      "tag": "0000_ambiguous_kat_farrell",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1729187058311,
-      "tag": "0001_plain_leper_queen",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1729367036835,
-      "tag": "0002_stiff_carlie_cooper",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1729376370224,
-      "tag": "0003_productive_blink",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1729710179214,
-      "tag": "0004_low_xorn",
+      "when": 1730132205401,
+      "tag": "0000_futuristic_bishop",
       "breakpoints": true
     }
   ]

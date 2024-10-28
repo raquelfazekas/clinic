@@ -83,6 +83,14 @@ const ActionCell: React.FC<ActionCellProps> = ({ patient }) => {
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
+            className="flex justify-between"
+            onClick={() => router.push(`/patient/reports/${patient.id}`)}
+          >
+            Relatório Médico
+            <UserRoundSearch />
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
             onClick={() => router.push(`/patient/edit/${patient.id}`)}
             className="flex justify-between"
           >

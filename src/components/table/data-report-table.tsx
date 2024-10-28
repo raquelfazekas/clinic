@@ -59,10 +59,10 @@ export function DataTable<TValue>({ columns, data, userId }: DataTableProps<TVal
       <div className="flex flex-col md:flex-row py-4 justify-between gap-4">
         <div className="flex flex-col md:flex-row gap-4"></div>
         <div className="flex flex-row gap-4">
-          <Link href={`/patient/records/create/${userId}`}>
+          <Link href={`/patient/reports/create/${userId}`}>
             <Button>
               <UserRoundPlus />
-              <span>Add Prontuário</span>
+              <span>Add Relatório Médico</span>
             </Button>
           </Link>
         </div>

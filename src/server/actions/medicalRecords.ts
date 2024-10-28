@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use server";
 
 import { db } from "@/drizzle";
@@ -8,7 +9,8 @@ import { healthRecordTableSchema } from "@/schema/medicalrecord";
 import { eq } from "drizzle-orm";
 
 export async function createMedicalRecords(
-  unsafeData: z.infer<typeof healthRecordTableSchema>
+  unsafeData: z.infer<typeof healthRecordTableSchema>,
+  typeRecord: string
 ) {
   const { userId } = auth();
   const { success, data } = healthRecordTableSchema.safeParse(unsafeData);
@@ -16,6 +18,7 @@ export async function createMedicalRecords(
   if (!success || userId == null) {
     return { error: true };
   }
+  
 
   const result = await db
     .insert(HealthRecordTable)
@@ -25,6 +28,7 @@ export async function createMedicalRecords(
       notes: data.notes,
       createdAt: data.createdAt,
       patientId: data.patientId,
+      type: typeRecord
     })
     .returning();
 
@@ -58,5 +62,29 @@ export async function updateMedicalRecords(
     return { success: true, patientId };
   } catch (error) {
     return { error: true, message: error };
+  }
+}
+
+
+export async function deleteMedicalRecords(id: string) {
+  const { userId } = auth();
+
+  if (!userId) {
+    return { error: true, message: "Invalid data or missing user" };
+  }
+
+  try {
+    const deletedRecord = await db
+      .delete(HealthRecordTable)
+      .where(eq(HealthRecordTable.id, id))
+      .returning();
+
+    if (deletedRecord.length === 0) {
+      return { error: true, message: "No records were deleted" };
+    }
+
+    return { success: true, message: "Record deleted successfully" };
+  } catch (error) {
+    return { error: true, message: "An error occurred during deletion" };
   }
 }

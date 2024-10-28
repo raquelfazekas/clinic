@@ -4,6 +4,7 @@ import {
   boolean,
   index,
   integer,
+  jsonb,
   pgEnum,
   pgTable,
   text,
@@ -82,7 +83,7 @@ export const PatientTable = pgTable("patients", {
   cpf: text("cpf").notNull().unique(),
   dateOfBirth: timestamp("dateOfBirth").notNull(),
   gender: text("gender").notNull(),
-  estado_civil: text('estado_civil').notNull(),
+  estado_civil: text("estado_civil").notNull(),
   children: integer("children").notNull(),
   work: text("work").notNull(),
   education: text("education").notNull(),
@@ -98,7 +99,6 @@ export const PatientTable = pgTable("patients", {
 export type PatientSelect = InferSelectModel<typeof PatientTable>;
 export type PatientInsert = InferInsertModel<typeof PatientTable>;
 
-
 // --- Prontuário Eletrônico ---
 export const HealthRecordTable = pgTable("health_records", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -108,13 +108,12 @@ export const HealthRecordTable = pgTable("health_records", {
   visitDate: timestamp("visitDate").notNull(),
   notes: text("notes"),
   doctor: text("doctor").notNull(),
+  type: text("type").notNull().default("default_value"),
   createdAt,
 });
 
-
 export type RecordSelect = InferSelectModel<typeof HealthRecordTable>;
 export type RecordInsert = InferInsertModel<typeof HealthRecordTable>;
-
 
 // --- Prescrição Eletrônica ---
 export const PrescriptionTable = pgTable("prescriptions", {
@@ -123,10 +122,14 @@ export const PrescriptionTable = pgTable("prescriptions", {
     .notNull()
     .references(() => PatientTable.id, { onDelete: "cascade" }),
   doctorId: text("doctorId").notNull(),
-  medications: text("medications[]").notNull(),
+  medications: jsonb("medications").notNull(),
+  type: text("type").notNull().default("default_value"),
   createdAt,
   updatedAt,
 });
+
+export type PrescriptionSelect = InferSelectModel<typeof PrescriptionTable>;
+export type PrescriptionInsert = InferInsertModel<typeof PrescriptionTable>;
 
 // --- Relations ---
 export const patientRelations = relations(PatientTable, ({ many }) => ({
@@ -134,16 +137,22 @@ export const patientRelations = relations(PatientTable, ({ many }) => ({
   prescriptions: many(PrescriptionTable),
 }));
 
-export const healthRecordRelations = relations(HealthRecordTable, ({ one }) => ({
-  patient: one(PatientTable, {
-    fields: [HealthRecordTable.patientId],
-    references: [PatientTable.id],
-  }),
-}));
+export const healthRecordRelations = relations(
+  HealthRecordTable,
+  ({ one }) => ({
+    patient: one(PatientTable, {
+      fields: [HealthRecordTable.patientId],
+      references: [PatientTable.id],
+    }),
+  })
+);
 
-export const prescriptionRelations = relations(PrescriptionTable, ({ one }) => ({
-  patient: one(PatientTable, {
-    fields: [PrescriptionTable.patientId],
-    references: [PatientTable.id],
-  }),
-}));
+export const prescriptionRelations = relations(
+  PrescriptionTable,
+  ({ one }) => ({
+    patient: one(PatientTable, {
+      fields: [PrescriptionTable.patientId],
+      references: [PatientTable.id],
+    }),
+  })
+);

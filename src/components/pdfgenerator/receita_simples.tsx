@@ -16,10 +16,12 @@ import {
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { useState } from "react";
+import { createPrescriptionRecord } from "@/server/actions/prescription";
 
 interface PrescriptionProps {
   patientName: string;
   doctorName: string;
+  patientId: string;
   crm: string;
   age: string;
   gender: string;
@@ -31,6 +33,7 @@ interface PrescriptionProps {
 export default function SimplePrescription({
   patientName,
   doctorName,
+  patientId,
   crm,
   age,
   gender,
@@ -56,6 +59,13 @@ export default function SimplePrescription({
   const handleRemoveMedication = (index: number) => {
     setMedications(medications.filter((_, i) => i !== index));
   };
+
+  async function handlePdfGeneration() {
+    generateSimplePrescription();
+    createPrescriptionRecord("RS", medications, patientId, doctorName);
+  }
+
+
 
   async function generateSimplePrescription() {
     const pdfDoc = await PDFDocument.create();
@@ -386,7 +396,7 @@ export default function SimplePrescription({
 
           <DialogFooter>
             <Button onClick={handleAddMedication}>Adicionar</Button>
-            <Button onClick={generateSimplePrescription}>Gerar PDF</Button>
+            <Button onClick={handlePdfGeneration}>Gerar PDF</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

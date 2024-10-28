@@ -17,10 +17,12 @@ import {
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { useState } from "react";
+import { createPrescriptionRecord } from "@/server/actions/prescription";
 
 interface PrescriptionProps {
   patientName: string;
   doctorName: string;
+  patientId: string;
   crm: string;
   age: string;
   gender: string;
@@ -32,6 +34,7 @@ interface PrescriptionProps {
 export default function EspecialPrescription({
   patientName,
   doctorName,
+  patientId,
   crm,
   age,
   gender,
@@ -57,6 +60,11 @@ export default function EspecialPrescription({
   const handleRemoveMedication = (index: number) => {
     setMedications(medications.filter((_, i) => i !== index));
   };
+
+  async function handlePdfGeneration() {
+    generateEspecialPrescription();
+    createPrescriptionRecord("RE", medications, patientId, doctorName);
+  }
 
   async function generateEspecialPrescription() {
     const pdfDoc = await PDFDocument.create();
@@ -434,7 +442,9 @@ export default function EspecialPrescription({
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle className="text-primary">Adicionar Medicação</DialogTitle>
+            <DialogTitle className="text-primary">
+              Adicionar Medicação
+            </DialogTitle>
             <DialogDescription>
               Preencha as informações da medicação e clique em Adicionar.
             </DialogDescription>
@@ -504,7 +514,10 @@ export default function EspecialPrescription({
             <h3 className="text-lg font-semibold">Medicações Adicionadas:</h3>
             <ul className="list-disc pl-5">
               {medications.map((medication, index) => (
-                <li key={index} className="flex justify-between items-center mb-2">
+                <li
+                  key={index}
+                  className="flex justify-between items-center mb-2"
+                >
                   <span>
                     {medication.name} - {medication.dosage} (x
                     {medication.quantity})
@@ -523,7 +536,7 @@ export default function EspecialPrescription({
 
           <DialogFooter>
             <Button onClick={handleAddMedication}>Adicionar</Button>
-            <Button onClick={generateEspecialPrescription}>Gerar PDF</Button>
+            <Button onClick={handlePdfGeneration}>Gerar PDF</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
