@@ -1,5 +1,4 @@
 import { pgTable, index, uuid, text, integer, boolean, timestamp, foreignKey, unique, pgEnum } from "drizzle-orm/pg-core"
-  import { sql } from "drizzle-orm"
 
 export const day = pgEnum("day", ['segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sabádo', 'domingo'])
 

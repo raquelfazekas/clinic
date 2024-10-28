@@ -64,9 +64,9 @@ const ActionCell: React.FC<ActionCellProps> = ({ record }) => {
     const patientName = record.patient.name;
     const doctorName = "Raquel de Jesus Fazekas";
     const crm = "214876 - SP";
-    const gender = "Masculino";
-    const address = record.patient.name
-    const issuanceDate = new Date().toLocaleDateString("pt-BR");
+    const gender = record.patient.gender;
+    const address = record.patient.address
+    const issuanceDate = new Date(record.createdAt).toLocaleDateString("pt-BR");
     const validityDate = "12/12/2024";
   
     const pdfBytes = await generateEspecialPrescription({

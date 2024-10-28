@@ -13,7 +13,7 @@ interface Medication {
     issuanceDate: string;
     validityDate: string; 
     patientName: string;
-    address: string;
+    address: string | null
     gender: string;
     medications: Medication[];
   }
