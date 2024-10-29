@@ -15,8 +15,8 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import { Label } from "../ui/label";
-import { Input } from "../ui/input";
 import { createPrescriptionRecord } from "@/server/actions/prescription";
+import { Textarea } from "../ui/textarea";
 
 interface PrescriptionProps {
   patientName: string;
@@ -25,7 +25,6 @@ interface PrescriptionProps {
   crm: string;
   age: string;
   gender: string;
-  address: string;
   issuanceDate: string;
 }
 
@@ -36,7 +35,6 @@ export default function ExamRequest({
   crm,
   age,
   gender,
-  address,
   issuanceDate,
 }: PrescriptionProps) {
   const [texts, setTexts] = useState<{ text: string }[]>([]);
@@ -134,12 +132,15 @@ export default function ExamRequest({
       size: 10,
       font: boldFont,
     });
-    page.drawText(address, {
-      x: 110,
-      y: contentStartY - 20,
-      size: 10,
-      font: timesRomanFont,
-    });
+    page.drawText(
+      "Rua Padre Timóteo Corrêa de Toledo, 259, Vila São José, Taubaté - SP",
+      {
+        x: 110,
+        y: contentStartY - 20,
+        size: 8,
+        font: timesRomanFont,
+      }
+    );
 
     page.drawText(`Dr(a). ${doctorName}`, {
       x: 50,
@@ -267,7 +268,7 @@ export default function ExamRequest({
               <Label htmlFor="reasonDescription" className="text-right">
                 Exame
               </Label>
-              <Input
+              <Textarea
                 id="reasonDescription"
                 value={newText}
                 onChange={(e) => setNewText(e.target.value)}

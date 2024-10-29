@@ -17,6 +17,7 @@ import {
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { createPrescriptionRecord } from "@/server/actions/prescription";
+import { Textarea } from "../ui/textarea";
 
 interface PrescriptionProps {
   patientName: string;
@@ -25,7 +26,6 @@ interface PrescriptionProps {
   crm: string;
   age: string;
   gender: string;
-  address: string;
   issuanceDate: string;
 }
 
@@ -36,7 +36,6 @@ export default function AtestadoMedico({
   crm,
   age,
   gender,
-  address,
   issuanceDate,
 }: PrescriptionProps) {
   const [texts, setTexts] = useState<{ text: string; cid: string }[]>([]);
@@ -97,10 +96,10 @@ export default function AtestadoMedico({
       end: { x: 50, y: 720 },
       thickness: 1,
     });
-    page.drawText("SOLICITAÇÃO DE EXAME", {
-      x: 215,
+    page.drawText("ATESTADO MÉDICO", {
+      x: 230,
       y: 730,
-      size: 14,
+      size: 14, 
       font: boldFont,
     });
     page.drawLine({
@@ -126,10 +125,10 @@ export default function AtestadoMedico({
       size: 10,
       font: boldFont,
     });
-    page.drawText(address, {
+    page.drawText("Rua Padre Timóteo Corrêa de Toledo, 259, Vila São José, Taubaté - SP", {
       x: 110,
       y: contentStartY - 20,
-      size: 10,
+      size: 8,
       font: timesRomanFont,
     });
 
@@ -277,13 +276,12 @@ export default function AtestadoMedico({
               <Label htmlFor="reasonDescription" className="text-right">
                 Descrição do Motivo
               </Label>
-              <Input
-                id="reasonDescription"
-                value={newText}
-                onChange={(e) => setNewText(e.target.value)}
-                className="col-span-3"
-                placeholder="Digite a descrição do motivo"
-              />
+              <Textarea
+              id="reasonDescription"
+              value={newText}
+              onChange={(e) => setNewText(e.target.value)}
+              className="col-span-3"
+              placeholder="Digite a descrição do motivo" />
             </div>
           </div>
 

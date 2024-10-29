@@ -8,7 +8,7 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import SimplePrescription from "@/components/pdfgenerator/receita_simples";
-import { addWeeks } from "date-fns";
+import { addMonths } from "date-fns";
 import ExamRequest from "@/components/pdfgenerator/solicitação_exame";
 import AtestadoMedico from "@/components/pdfgenerator/atestado_medico";
 import EspecialPrescription from "@/components/pdfgenerator/receita_especial";
@@ -50,9 +50,11 @@ export default async function PatientPage({
           crm="214876 - SP"
           age={calculateAgeWithOutMonths(patientInfo.dateOfBirth.toISOString())}
           gender={patientInfo.gender}
-          address={patientInfo.address || ""}
-          issuanceDate={new Date().toLocaleDateString()}
-          validityDate={addWeeks(new Date(), 1).toLocaleDateString()}
+          address={
+            "Rua Padre Timóteo Corrêa de Toledo, 259, Vila São José, Taubaté - SP"
+          }
+          issuanceDate={new Date().toLocaleDateString("pt-BR")}
+          validityDate={addMonths(new Date(), 1).toLocaleDateString("pt-BR")}
         />
 
         <EspecialPrescription
@@ -63,8 +65,8 @@ export default async function PatientPage({
           age={calculateAgeWithOutMonths(patientInfo.dateOfBirth.toISOString())}
           gender={patientInfo.gender}
           address={patientInfo.address || ""}
-          issuanceDate={new Date().toLocaleDateString()}
-          validityDate={addWeeks(new Date(), 1).toLocaleDateString()}
+          issuanceDate={new Date().toLocaleDateString("pt-BR")}
+          validityDate={addMonths(new Date(), 1).toLocaleDateString("pt-BR")}
         />
 
         <AtestadoMedico
@@ -75,7 +77,7 @@ export default async function PatientPage({
           age={calculateAgeWithOutMonths(patientInfo.dateOfBirth.toISOString())}
           gender={patientInfo.gender}
           address={patientInfo.address || ""}
-          issuanceDate={new Date().toLocaleDateString()}
+          issuanceDate={new Date().toLocaleDateString("pt-BR")}
         />
 
         <ExamRequest
@@ -86,16 +88,15 @@ export default async function PatientPage({
           age={calculateAgeWithOutMonths(patientInfo.dateOfBirth.toISOString())}
           gender={patientInfo.gender}
           address={patientInfo.address || ""}
-          issuanceDate={new Date().toLocaleDateString()}
+          issuanceDate={new Date().toLocaleDateString("pt-BR")}
         />
 
-          <Link href={`/patient/prescriptions/${patientInfo.id}`}>
-            <Button className="w-full">
-              <Archive />
-               Histórico
-            </Button>
-          </Link>
-
+        <Link href={`/patient/prescriptions/${patientInfo.id}`}>
+          <Button className="w-full">
+            <Archive />
+            Histórico
+          </Button>
+        </Link>
       </CardFooter>
     </Card>
   );

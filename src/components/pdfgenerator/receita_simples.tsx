@@ -142,7 +142,7 @@ export default function SimplePrescription({
     page.drawText(address, {
       x: 110,
       y: contentStartY - 20,
-      size: 10,
+      size: 8,
       font: timesRomanFont,
     });
 
@@ -290,8 +290,7 @@ export default function SimplePrescription({
     // Save and download PDF
     const pdfBytes = await pdfDoc.save();
     const blob = new Blob([pdfBytes], { type: "application/pdf" });
-    saveAs(blob, "receita_simples.pdf");
-
+    saveAs(blob, `Receita_simples_${patientName}`);
     setMedications([]);
     setNewMedication({ name: "", dosage: "", quantity: "", instructions: "" });
   }

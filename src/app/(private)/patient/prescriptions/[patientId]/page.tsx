@@ -16,6 +16,7 @@ export type PrescriptionRecord = {
     cpf: string;
     address: string | null;
     gender: string;
+    dateOfBirth: Date
   };
 };
 
@@ -34,6 +35,7 @@ export default async function MedicalRecordsPage({
             cpf: true,
             address: true,
             gender: true,
+            dateOfBirth: true
           },
         },
       },

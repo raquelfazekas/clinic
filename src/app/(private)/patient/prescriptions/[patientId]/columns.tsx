@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
@@ -10,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal, UserRoundPen, UserRoundX } from "lucide-react";
+import { FileSearch, MoreHorizontal, UserRoundPen, UserRoundX } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogTrigger,
@@ -26,10 +27,20 @@ import { useState, startTransition } from "react";
 import { useRouter } from "next/navigation";
 import { PrescriptionRecord } from "./page";
 import { deletePrescriptionRecords } from "@/server/actions/prescription";
-import generateEspecialPrescription from "@/components/pdfPreview/ReceitaEspecial"
+import generateEspecialPrescription from "@/components/pdfPreview/ReceitaEspecial";
+import { addMonths } from "date-fns";
+import { calculateAgeWithOutMonths } from "@/lib/formatters";
+import generateSimplePrescription from "@/components/pdfPreview/ReceitaSimples";
+import generateExamRequest from "@/components/pdfPreview/SolicitacaoExame";
+import generateAtestadoMedico from "@/components/pdfPreview/AtestadoMedico";
 
 interface ActionCellProps {
   record: PrescriptionRecord;
+}
+
+interface Texts {
+  text: string;
+  cid: string;
 }
 
 interface Medication {
@@ -59,34 +70,84 @@ const ActionCell: React.FC<ActionCellProps> = ({ record }) => {
     }
   };
 
-
   const handlePdfGeneration = async (record: PrescriptionRecord) => {
     const patientName = record.patient.name;
     const doctorName = "Raquel de Jesus Fazekas";
     const crm = "214876 - SP";
     const gender = record.patient.gender;
-    const address = record.patient.address
+    const address = record.patient.address;
+    const age = calculateAgeWithOutMonths(
+      record.patient.dateOfBirth.toISOString()
+    );
     const issuanceDate = new Date(record.createdAt).toLocaleDateString("pt-BR");
-    const validityDate = "12/12/2024";
-  
-    const pdfBytes = await generateEspecialPrescription({
-      patientName,
-      doctorName,
-      crm,
-      gender,
-      address,
-      issuanceDate,
-      validityDate,
-      medications: record.medications as Medication[],
-    });
-  
-    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+    const validityDate = addMonths(
+      new Date(record.createdAt),
+      1
+    ).toLocaleDateString("pt-BR");
+
+    let pdfBytes: Uint8Array;
+
+    switch (record.type) {
+      case "RE": // Receita Especial
+        pdfBytes = await generateEspecialPrescription({
+          patientName,
+          doctorName,
+          crm,
+          gender,
+          address,
+          issuanceDate,
+          validityDate,
+          medications: record.medications as Medication[],
+        });
+        break;
+
+      case "RS": // Receita Simples
+        pdfBytes = await generateSimplePrescription({
+          patientName,
+          doctorName,
+          crm,
+          gender,
+          age,
+          issuanceDate,
+          validityDate,
+          medications: record.medications as Medication[],
+        });
+        break;
+
+      case "SE": // Solicitação de Exame
+        pdfBytes = await generateExamRequest({
+          patientName,
+          doctorName,
+          crm,
+          gender,
+          age,
+          issuanceDate,
+          texts: record.medications as Texts[],
+        });
+        break;
+
+      case "ATM": // Atestado Médico
+        pdfBytes = await generateAtestadoMedico({
+          patientName,
+          doctorName,
+          crm,
+          gender,
+          age,
+          issuanceDate,
+          texts: record.medications as Texts[],
+        });
+        break;
+
+      default:
+        console.error("Tipo de PDF desconhecido:", record.type);
+        return;
+    }
+
+    const blob = new Blob([pdfBytes], { type: "application/pdf" });
     const url = URL.createObjectURL(blob);
-  
+
     window.open(url);
   };
-  
-
 
   return (
     <>
@@ -102,18 +163,10 @@ const ActionCell: React.FC<ActionCellProps> = ({ record }) => {
           <DropdownMenuSeparator />
           <DropdownMenuItem
             className="flex justify-between"
-            onClick={() => router.push(`/patient/records/edit/${record.id}`)}
-          >
-            Visualizar
-            <UserRoundPen />
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            className="flex justify-between"
             onClick={() => handlePdfGeneration(record)}
           >
-            PDF
-            <UserRoundPen />
+            Visualizar
+            <FileSearch />
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
