@@ -76,7 +76,6 @@ export default async function PatientPage({
           crm="214876 - SP"
           age={calculateAgeWithOutMonths(patientInfo.dateOfBirth.toISOString())}
           gender={patientInfo.gender}
-          address={patientInfo.address || ""}
           issuanceDate={new Date().toLocaleDateString("pt-BR")}
         />
 
@@ -87,7 +86,6 @@ export default async function PatientPage({
           crm="214876 - SP"
           age={calculateAgeWithOutMonths(patientInfo.dateOfBirth.toISOString())}
           gender={patientInfo.gender}
-          address={patientInfo.address || ""}
           issuanceDate={new Date().toLocaleDateString("pt-BR")}
         />
 
