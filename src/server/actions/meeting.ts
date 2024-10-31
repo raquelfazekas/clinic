@@ -31,7 +31,7 @@ export async function createMeeting(
 
     const startInTimezone = fromZonedTime(data.startTime, data.timezone)
 
-    const startInTimezone2 = subHours(startInTimezone, 3)
+    const startInTimezone2 = subHours(startInTimezone, 6)
 
     console.log("startInTimezone",startInTimezone2)
 
