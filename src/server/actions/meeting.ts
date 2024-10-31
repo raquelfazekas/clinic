@@ -13,6 +13,8 @@ export async function createMeeting(
 ) {
     const { success, data } = meetingActionSchema.safeParse(unsafeData)
 
+    console.log("data:", data)
+
     if (!success) return { error: true }
 
     const event = await db.query.EventTable.findFirst({
@@ -25,6 +27,7 @@ export async function createMeeting(
     })
 
     if (event == null) return { error: true }
+
     const startInTimezone = fromZonedTime(data.startTime, data.timezone)
 
     console.log("startInTimezone",startInTimezone)
