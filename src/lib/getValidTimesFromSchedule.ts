@@ -15,6 +15,7 @@ import {
   isWithinInterval,
   setHours,
   setMinutes,
+  subHours,
 } from "date-fns"
 import { fromZonedTime } from "date-fns-tz"
 
@@ -24,6 +25,9 @@ export async function getValidTimesFromSchedule(
 ) {
   const start = timesInOrder[0]
   const end = timesInOrder.at(-1)
+
+  const updatedStart = subHours(new Date(start), 3);
+const updatedEnd = subHours(new Date(end as Date), 3);
 
   console.log(start, end)
 
@@ -46,8 +50,8 @@ export async function getValidTimesFromSchedule(
   
 
   const eventTimes = await getCalendarEventTimes(event.clerkUserId, {
-    start,
-    end,
+    start:updatedStart,
+    end:updatedEnd,
   })
 
   return timesInOrder.filter(intervalDate => {
