@@ -32,7 +32,7 @@ export async function createMeeting(
 
     console.log("startInTimezone",data.startTime)
 
-    const validTimes = await getValidTimesFromSchedule([startInTimezone], event)
+    const validTimes = await getValidTimesFromSchedule([data.startTime], event)
 
     console.log("validTimes:", validTimes)
 
