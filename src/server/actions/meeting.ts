@@ -28,6 +28,9 @@ export async function createMeeting(
     const startInTimezone = fromZonedTime(data.startTime, data.timezone)
 
     const validTimes = await getValidTimesFromSchedule([startInTimezone], event)
+
+    console.log("validTimes:", validTimes)
+
     if (validTimes.length === 0) return { error: true }
 
     await createCalendarEvent({

@@ -56,6 +56,8 @@ export async function getValidTimesFromSchedule(
     end:updatedEnd,
   })
 
+  console.log("eventTimes:",eventTimes)
+
   return timesInOrder.filter(intervalDate => {
     const availabilities = getAvailabilities(
       groupedAvailabilities,
