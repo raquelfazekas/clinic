@@ -68,7 +68,7 @@ export function MeetingForm({
 
     if (data?.error) {
       form.setError("root", {
-        message: data.error as string,
+        message: "There was an error saving your event",
       });
     }
   }
