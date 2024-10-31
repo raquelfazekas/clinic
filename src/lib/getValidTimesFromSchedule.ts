@@ -26,10 +26,12 @@ export async function getValidTimesFromSchedule(
   const start = timesInOrder[0]
   const end = timesInOrder.at(-1)
 
-  const updatedStart = subHours(new Date(start), 3);
-const updatedEnd = subHours(new Date(end as Date), 3);
+  const updatedStart = subHours(start, 3);
+  const updatedEnd = subHours(end as Date, 3);
 
-  console.log(start, end)
+  console.log("start:",start, "end:", end)
+
+  console.log(updatedStart, updatedEnd)
 
   if (start == null || end == null) return []
 
