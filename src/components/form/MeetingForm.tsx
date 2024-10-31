@@ -66,6 +66,8 @@ export function MeetingForm({
       clerkUserId,
     });
 
+    console.log(data)
+
     if (data?.error) {
       form.setError("root", {
         message: "There was an error saving your event",
