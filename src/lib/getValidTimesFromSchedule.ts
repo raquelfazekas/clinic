@@ -1,7 +1,7 @@
-import { DAYS_OF_WEEK_IN_ORDER } from "@/data/constants"
-import { db } from "@/drizzle"
-import { ScheduleAvailabilityTable } from "@/drizzle/schema"
-import { getCalendarEventTimes } from "@/server/googleCalendar"
+import { DAYS_OF_WEEK_IN_ORDER } from "@/data/constants";
+import { db } from "@/drizzle";
+import { ScheduleAvailabilityTable } from "@/drizzle/schema";
+import { getCalendarEventTimes } from "@/server/googleCalendar";
 import {
   addMinutes,
   areIntervalsOverlapping,
@@ -15,72 +15,65 @@ import {
   isWithinInterval,
   setHours,
   setMinutes,
-  subHours,
-} from "date-fns"
-import { fromZonedTime } from "date-fns-tz"
+} from "date-fns";
+import { fromZonedTime } from "date-fns-tz";
 
 export async function getValidTimesFromSchedule(
   timesInOrder: Date[],
   event: { clerkUserId: string; durationInMinutes: number }
 ) {
-  const start = timesInOrder[0]
-  const end = timesInOrder.at(-1)
+  const start = timesInOrder[0];
+  const end = timesInOrder.at(-1);
 
-  const updatedStart = subHours(start, 6);
-  const updatedEnd = subHours(end as Date, 6);
+  console.log("start:", start, "end:", end);
 
-  console.log("start:",start, "end:", end)
-
-  console.log(updatedStart, updatedEnd)
-
-  if (start == null || end == null) return []
+  if (start == null || end == null) return [];
 
   const schedule = await db.query.ScheduleTable.findFirst({
     where: ({ clerkUserId: userIdCol }, { eq }) =>
       eq(userIdCol, event.clerkUserId),
     with: { availabilities: true },
-  })
+  });
 
-  console.log(schedule)
+  console.log(schedule);
 
-  if (schedule == null) return []
+  if (schedule == null) return [];
 
   const groupedAvailabilities = groupBy(
     schedule.availabilities,
-    a => a.dayOfWeek
-  )
-  
+    (a) => a.dayOfWeek
+  );
 
   const eventTimes = await getCalendarEventTimes(event.clerkUserId, {
-    start:updatedStart,
-    end:updatedEnd,
-  })
+    start,
+    end,
+  });
 
-  console.log("eventTimes:",eventTimes)
+  console.log("eventTimes:", eventTimes);
 
-  return timesInOrder.filter(intervalDate => {
+  return timesInOrder.filter((intervalDate) => {
     const availabilities = getAvailabilities(
       groupedAvailabilities,
       intervalDate,
       schedule.timezone
-    )
+    );
     const eventInterval = {
       start: intervalDate,
       end: addMinutes(intervalDate, event.durationInMinutes),
-    }
+    };
 
     return (
-      eventTimes.every(eventTime => {
-        return !areIntervalsOverlapping(eventTime, eventInterval)
+      eventTimes.every((eventTime) => {
+        return !areIntervalsOverlapping(eventTime, eventInterval);
       }) &&
-      availabilities.some(availability => {
+      availabilities.some((availability) => {
         return (
           isWithinInterval(eventInterval.start, availability) &&
           isWithinInterval(eventInterval.end, availability)
-        )
+        );
       })
-    )
-  })
+    );
+  });
 }
 
 function getAvailabilities(
@@ -95,31 +88,31 @@ function getAvailabilities(
 ) {
   let availabilities:
     | (typeof ScheduleAvailabilityTable.$inferSelect)[]
-    | undefined
+    | undefined;
 
   if (isMonday(date)) {
-    availabilities = groupedAvailabilities["segunda-feira"]
+    availabilities = groupedAvailabilities["segunda-feira"];
   }
   if (isTuesday(date)) {
-    availabilities = groupedAvailabilities["terça-feira"]
+    availabilities = groupedAvailabilities["terça-feira"];
   }
   if (isWednesday(date)) {
-    availabilities = groupedAvailabilities["quarta-feira"]
+    availabilities = groupedAvailabilities["quarta-feira"];
   }
   if (isThursday(date)) {
-    availabilities = groupedAvailabilities["quinta-feira"]
+    availabilities = groupedAvailabilities["quinta-feira"];
   }
   if (isFriday(date)) {
-    availabilities = groupedAvailabilities["sexta-feira"]
+    availabilities = groupedAvailabilities["sexta-feira"];
   }
   if (isSaturday(date)) {
-    availabilities = groupedAvailabilities.sabádo
+    availabilities = groupedAvailabilities.sabádo;
   }
   if (isSunday(date)) {
-    availabilities = groupedAvailabilities.domingo
+    availabilities = groupedAvailabilities.domingo;
   }
 
-  if (availabilities == null) return []
+  if (availabilities == null) return [];
 
   return availabilities.map(({ startTime, endTime }) => {
     const start = fromZonedTime(
@@ -128,7 +121,7 @@ function getAvailabilities(
         parseInt(startTime.split(":")[1])
       ),
       timezone
-    )
+    );
 
     const end = fromZonedTime(
       setMinutes(
@@ -136,14 +129,16 @@ function getAvailabilities(
         parseInt(endTime.split(":")[1])
       ),
       timezone
-    )
+    );
 
-    return { start, end }
-  })
+    return { start, end };
+  });
 }
 
-
-function groupBy<T>(array: T[], keyGetter: (item: T) => string): Record<string, T[]> {
+function groupBy<T>(
+  array: T[],
+  keyGetter: (item: T) => string
+): Record<string, T[]> {
   return array.reduce((result, currentItem) => {
     const key = keyGetter(currentItem);
     if (!result[key]) {
