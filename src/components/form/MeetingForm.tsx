@@ -34,7 +34,7 @@ import { Calendar } from "../ui/calendar";
 import { isSameDay } from "date-fns";
 import { cn } from "@/lib/utils";
 import { useMemo } from "react";
-import { toZonedTime } from "date-fns-tz";
+import { fromZonedTime, toZonedTime } from "date-fns-tz";
 import { createMeeting } from "@/server/actions/meeting";
 import { ptBR } from "date-fns/locale";
 
@@ -146,7 +146,7 @@ export function MeetingForm({
                           isSameDay(date, time)
                         )
                       }
-                      locale={ptBR} // Configura o idioma do calendário para português
+                      locale={ptBR}
                       initialFocus
                     />
                   </PopoverContent>
@@ -163,9 +163,10 @@ export function MeetingForm({
                 <FormLabel>Horário</FormLabel>
                 <Select
                   disabled={date == null || timezone == null}
-                  onValueChange={(value) =>
-                    field.onChange(new Date(Date.parse(value)))
-                  }
+                  onValueChange={(value) => {
+                    const utcDate = fromZonedTime(new Date(value), timezone);
+                    field.onChange(utcDate);
+                  }}
                   defaultValue={field.value?.toISOString()}
                 >
                   <FormControl>
