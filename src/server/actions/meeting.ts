@@ -24,6 +24,8 @@ export async function createMeeting(
             ),
     })
 
+    console.log(event)
+
     if (event == null) return { error: true }
     const startInTimezone = fromZonedTime(data.startTime, data.timezone)
 
