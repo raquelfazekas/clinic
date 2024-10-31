@@ -111,7 +111,7 @@ export function MeetingForm({
           )}
         />
         <div className="flex gap-4 flex-col md:flex-row">
-        <FormField
+          <FormField
             control={form.control}
             name="date"
             render={({ field }) => (
@@ -155,7 +155,7 @@ export function MeetingForm({
               </Popover>
             )}
           />
-         <FormField
+          <FormField
             control={form.control}
             name="startTime"
             render={({ field }) => (
@@ -164,8 +164,7 @@ export function MeetingForm({
                 <Select
                   disabled={date == null || timezone == null}
                   onValueChange={(value) =>
-                    // Converte o horário para UTC antes de salvar
-                    field.onChange(toZonedTime(new Date(value), timezone))
+                    field.onChange(new Date(Date.parse(value)))
                   }
                   defaultValue={field.value?.toISOString()}
                 >
