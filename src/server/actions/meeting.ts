@@ -43,7 +43,7 @@ export async function createMeeting(
 
     await createCalendarEvent({
         ...data,
-        startTime: startInTimezone,
+        startTime: startInTimezone2,
         durationInMinutes: event.durationInMinutes,
         eventName: event.name,
     })
