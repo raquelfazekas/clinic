@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { format, parseISO } from "date-fns";
+import { format, parseISO, subHours } from "date-fns";
 import { GoogleCalendarEvent } from "@/data/types";
 import { getSchedulesDay } from "@/server/googleCalendar";
 import { auth } from "@clerk/nextjs/server";
@@ -55,6 +55,9 @@ export default async function SchedulePage({
           {events.map((event: GoogleCalendarEvent) => {
             const [paciente, medico, evento] = event.summary.split(" ; ");
 
+              const start = subHours(new Date(event.start.dateTime), 3).toLocaleString()
+              const end = subHours(new Date(event.end.dateTime), 3).toLocaleString()
+
             return (
               <Card
                 key={event.id}
@@ -70,9 +73,9 @@ export default async function SchedulePage({
                     <p className="text-gray-700 font-medium">{paciente}</p>
                     <p className="text-gray-500">{evento}</p>
                     <p className="text-sm text-gray-600">
-                      Início: {new Date(event.start.dateTime).toLocaleString()}{" "}
+                      Início: {start} {" "}
                       <br />
-                      Fim: {new Date(event.end.dateTime).toLocaleString()}
+                      Fim: {end}
                     </p>
                     <p className="text-sm text-gray-600">
                       {

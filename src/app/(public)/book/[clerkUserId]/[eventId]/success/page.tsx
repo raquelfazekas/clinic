@@ -8,6 +8,7 @@ import {
 import { db } from "@/drizzle";
 import { formatDateTime } from "@/lib/formatters";
 import { clerkClient } from "@clerk/nextjs/server";
+import { subHours } from "date-fns";
 import { notFound } from "next/navigation";
 
 export const revalidate = 0;
@@ -27,9 +28,7 @@ export default async function SuccessPage({
   if (event == null) notFound();
 
   const calendarUser = await clerkClient().users.getUser(clerkUserId);
-  const startTimeDate = new Date(startTime);
-
-  console.log(formatDateTime(startTimeDate))
+  const startTimeDate = new Date(subHours(startTime, 3));
 
   return (
     <Card className="max-w-xl mx-auto mt-16">
