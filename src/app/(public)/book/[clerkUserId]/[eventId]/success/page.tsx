@@ -6,8 +6,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { db } from "@/drizzle";
-import { formatDateTime } from "@/lib/formatters";
 import { clerkClient } from "@clerk/nextjs/server";
+import { format } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
 import { notFound } from "next/navigation";
 
@@ -32,6 +32,8 @@ export default async function SuccessPage({
 
   const startTime2 = toZonedTime(startTimeDate, "America/Sao_Paulo");
 
+  const formattedStartTime = format(startTime2, "dd MMMM yyyy, HH:mm")
+
   return (
     <Card className="max-w-xl mx-auto mt-16">
       <CardHeader>
@@ -48,7 +50,7 @@ export default async function SuccessPage({
             </span>
           </CardTitle>
         </div>
-        <CardDescription>{formatDateTime(startTime2)}</CardDescription>
+        <CardDescription>{formattedStartTime}</CardDescription>
       </CardHeader>
       <CardContent>
         Você deve receber um e-mail de confirmação em breve. Agora você pode

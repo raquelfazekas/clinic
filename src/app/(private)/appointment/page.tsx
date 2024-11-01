@@ -65,6 +65,10 @@ export default async function SchedulePage({
               event.end.timeZone
             ).toLocaleString();
 
+            const formattedStartTime = format(start, "dd MMMM yyyy, HH:mm");
+
+            const formattedEndTime = format(end, "dd MMMM yyyy, HH:mm");
+
             return (
               <Card
                 key={event.id}
@@ -80,8 +84,8 @@ export default async function SchedulePage({
                     <p className="text-gray-700 font-medium">{paciente}</p>
                     <p className="text-gray-500">{evento}</p>
                     <p className="text-sm text-gray-600">
-                      Início: {start} <br />
-                      Fim: {end}
+                      Início: {formattedStartTime} <br />
+                      Fim: {formattedEndTime}
                     </p>
                     <p className="text-sm text-gray-600">
                       {
