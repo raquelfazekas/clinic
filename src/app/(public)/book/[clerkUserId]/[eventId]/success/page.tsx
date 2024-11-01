@@ -32,7 +32,7 @@ export default async function SuccessPage({
 
   const startTime2 = toZonedTime(startTimeDate, "America/Sao_Paulo");
 
-  const formattedStartTime = format(startTime2, "dd MMMM yyyy, HH:mm")
+  const formattedStartTime = format(startTime2, "dd/MM/yyyy, HH:mm")
 
   return (
     <Card className="max-w-xl mx-auto mt-16">

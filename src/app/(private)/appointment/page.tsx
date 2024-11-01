@@ -65,9 +65,9 @@ export default async function SchedulePage({
               event.end.timeZone
             ).toLocaleString();
 
-            const formattedStartTime = format(start, "dd MMMM yyyy, HH:mm");
+            const formattedStartTime = format(start, "dd/MM/yyyy, HH:mm");
 
-            const formattedEndTime = format(end, "dd MMMM yyyy, HH:mm");
+            const formattedEndTime = format(end, "dd/MM/yyyy, HH:mm");
 
             return (
               <Card
