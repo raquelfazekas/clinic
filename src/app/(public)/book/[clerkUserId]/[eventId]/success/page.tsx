@@ -8,7 +8,7 @@ import {
 import { db } from "@/drizzle";
 import { formatDateTime } from "@/lib/formatters";
 import { clerkClient } from "@clerk/nextjs/server";
-import { subHours } from "date-fns";
+import { fromZonedTime } from "date-fns-tz";
 import { notFound } from "next/navigation";
 
 export const revalidate = 0;
@@ -28,7 +28,9 @@ export default async function SuccessPage({
   if (event == null) notFound();
 
   const calendarUser = await clerkClient().users.getUser(clerkUserId);
-  const startTimeDate = new Date(subHours(startTime, 3));
+  const startTimeDate = new Date(startTime);
+
+  const startTime2 = fromZonedTime(startTimeDate, "America/Sao_Paulo")
 
   return (
     <Card className="max-w-xl mx-auto mt-16">
@@ -44,7 +46,7 @@ export default async function SuccessPage({
             <span className="uppercase text-primary">{calendarUser.fullName}</span>
           </CardTitle>
         </div>
-        <CardDescription>{formatDateTime(startTimeDate)}</CardDescription>
+        <CardDescription>{formatDateTime(startTime2)}</CardDescription>
       </CardHeader>
       <CardContent>
         Você deve receber um e-mail de confirmação em breve. Agora você pode
