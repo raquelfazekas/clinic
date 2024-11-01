@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { format, parseISO, subHours } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { GoogleCalendarEvent } from "@/data/types";
 import { getSchedulesDay } from "@/server/googleCalendar";
 import { auth } from "@clerk/nextjs/server";
@@ -13,6 +13,7 @@ import Link from "next/link";
 import { CalendarArrowUp, CalendarRange } from "lucide-react";
 import { AppointmentForm } from "@/components/form/AppointmentForm";
 import { Button } from "@/components/ui/button";
+import { toZonedTime } from "date-fns-tz";
 
 export const revalidate = 0;
 
@@ -55,8 +56,14 @@ export default async function SchedulePage({
           {events.map((event: GoogleCalendarEvent) => {
             const [paciente, medico, evento] = event.summary.split(" ; ");
 
-              const start = subHours(new Date(event.start.dateTime), 3).toLocaleString()
-              const end = subHours(new Date(event.end.dateTime), 3).toLocaleString()
+            const start = toZonedTime(
+              new Date(event.start.dateTime),
+              event.start.timeZone
+            ).toLocaleString();
+            const end = toZonedTime(
+              new Date(event.end.dateTime),
+              event.end.timeZone
+            ).toLocaleString();
 
             return (
               <Card
@@ -73,8 +80,7 @@ export default async function SchedulePage({
                     <p className="text-gray-700 font-medium">{paciente}</p>
                     <p className="text-gray-500">{evento}</p>
                     <p className="text-sm text-gray-600">
-                      Início: {start} {" "}
-                      <br />
+                      Início: {start} <br />
                       Fim: {end}
                     </p>
                     <p className="text-sm text-gray-600">
