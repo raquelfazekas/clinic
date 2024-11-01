@@ -7,6 +7,7 @@ import { createCalendarEvent } from "../googleCalendar"
 import { redirect } from "next/navigation"
 import { fromZonedTime } from "date-fns-tz"
 import { db } from "@/drizzle"
+import { subHours } from "date-fns"
 
 export async function createMeeting(
   unsafeData: z.infer<typeof meetingActionSchema>
@@ -25,7 +26,8 @@ export async function createMeeting(
   })
 
   if (event == null) return { error: true }
-  const startInTimezone = fromZonedTime(data.startTime, data.timezone)
+
+  const startInTimezone = fromZonedTime(subHours(data.startTime, 3), data.timezone)
 
   const validTimes = await getValidTimesFromSchedule([startInTimezone], event)
   if (validTimes.length === 0) return { error: true }

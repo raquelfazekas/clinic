@@ -29,6 +29,8 @@ export default async function SuccessPage({
   const calendarUser = await clerkClient().users.getUser(clerkUserId);
   const startTimeDate = new Date(startTime);
 
+  console.log(formatDateTime(startTimeDate))
+
   return (
     <Card className="max-w-xl mx-auto mt-16">
       <CardHeader>
