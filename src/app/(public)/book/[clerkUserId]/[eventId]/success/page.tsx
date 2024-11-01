@@ -8,7 +8,7 @@ import {
 import { db } from "@/drizzle";
 import { formatDateTime } from "@/lib/formatters";
 import { clerkClient } from "@clerk/nextjs/server";
-import { fromZonedTime } from "date-fns-tz";
+import { toZonedTime } from "date-fns-tz";
 import { notFound } from "next/navigation";
 
 export const revalidate = 0;
@@ -30,7 +30,7 @@ export default async function SuccessPage({
   const calendarUser = await clerkClient().users.getUser(clerkUserId);
   const startTimeDate = new Date(startTime);
 
-  const startTime2 = fromZonedTime(startTimeDate, "America/Sao_Paulo")
+  const startTime2 = toZonedTime(startTimeDate, "America/Sao_Paulo");
 
   return (
     <Card className="max-w-xl mx-auto mt-16">
@@ -43,7 +43,9 @@ export default async function SuccessPage({
           <CardTitle>
             {" "}
             {`Dr(a)`}{" "}
-            <span className="uppercase text-primary">{calendarUser.fullName}</span>
+            <span className="uppercase text-primary">
+              {calendarUser.fullName}
+            </span>
           </CardTitle>
         </div>
         <CardDescription>{formatDateTime(startTime2)}</CardDescription>
