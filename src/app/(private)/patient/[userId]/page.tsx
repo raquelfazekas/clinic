@@ -51,7 +51,7 @@ export default async function PatientPage({
           age={calculateAgeWithOutMonths(patientInfo.dateOfBirth.toISOString())}
           gender={patientInfo.gender}
           address={
-            "Rua Padre Timóteo Corrêa de Toledo, 259, Vila São José, Taubaté - SP"
+            "Rua Dr. Souza Alves, 139 - Centro, Taubaté - SP"
           }
           issuanceDate={new Date().toLocaleDateString("pt-BR")}
           validityDate={addMonths(new Date(), 1).toLocaleDateString("pt-BR")}

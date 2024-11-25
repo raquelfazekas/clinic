@@ -39,7 +39,6 @@ export default function SimplePrescription({
   gender,
   address,
   issuanceDate,
-  validityDate,
 }: PrescriptionProps) {
   const [medications, setMedications] = useState<
     { name: string; dosage: string; quantity: string; instructions: string }[]
@@ -228,18 +227,7 @@ export default function SimplePrescription({
       thickness: 1,
     });
 
-    page.drawText("Data de validade:", {
-      x: 400,
-      y: contentStartY - 140,
-      size: 10,
-      font: boldFont,
-    });
-    page.drawText(validityDate, {
-      x: 500,
-      y: contentStartY - 140,
-      size: 10,
-      font: timesRomanFont,
-    });
+
 
     // Medication listing
     let yPosition = contentStartY - 180;

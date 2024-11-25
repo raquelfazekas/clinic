@@ -125,7 +125,7 @@ export default function AtestadoMedico({
       size: 10,
       font: boldFont,
     });
-    page.drawText("Rua Padre Timóteo Corrêa de Toledo, 259, Vila São José, Taubaté - SP", {
+    page.drawText("Rua Dr. Souza Alves, 139 - Centro, Taubaté - SP", {
       x: 110,
       y: contentStartY - 20,
       size: 8,

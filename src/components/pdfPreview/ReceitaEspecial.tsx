@@ -22,7 +22,6 @@ interface Medication {
     doctorName,
     crm,
     issuanceDate,
-    validityDate,
     patientName,
     address,
     gender,
@@ -127,7 +126,7 @@ interface Medication {
     font: boldFont,
   });
   page.drawText(
-    "Rua Padre Timóteo Corrêa de Toledo, 259, Vila São José, Taubaté - SP",
+    "Rua Dr. Souza Alves, 139 - Centro, Taubaté - SP",
     {
       x: 105,
       y: doctorBoxStartY - 73,
@@ -176,27 +175,15 @@ interface Medication {
     font: timesRomanFont,
   });
 
-  page.drawText("Data de Validade:", {
-    x: 410,
-    y: doctorBoxStartY - 35,
-    size: 10,
-    font: boldFont,
-  });
-  page.drawText(`${validityDate}`, {
-    x: 500,
-    y: doctorBoxStartY - 35,
-    size: 10,
-    font: timesRomanFont,
-  });
   page.drawText(`1ª VIA FARMÁCIA`, {
     x: 410,
-    y: doctorBoxStartY - 50,
+    y: doctorBoxStartY - 35,
     size: 10,
     font: boldFont,
   });
   page.drawText(`2ª VIA PACIENTE`, {
     x: 410,
-    y: doctorBoxStartY - 65,
+    y: doctorBoxStartY - 50,
     size: 10,
     font: boldFont,
   });
@@ -293,23 +280,91 @@ interface Medication {
     yPosition -= 30;
   });
 
+  // Footer boxes
   const bottomY = 150;
-  // Bottom boxes
-  page.drawRectangle({
-    x: 50,
-    y: bottomY,
-    width: 500,
-    height: 100,
-    borderWidth: 1,
-    borderColor: rgb(0, 0, 0),
-  });
+  const boxHeight = 125;
 
-  page.drawText("Observações:", {
-    x: 60,
-    y: bottomY + 75,
-    size: 10,
-    font: boldFont,
-  });
+   // Box 1: Comprador
+page.drawRectangle({
+  x: 50,
+  y: bottomY - boxHeight,
+  width: 240,
+  height: boxHeight,
+  borderWidth: 1,
+  borderColor: rgb(0, 0, 0),
+});
+page.drawText("IDENTIFICAÇÃO DO COMPRADOR", {
+  x: 100,
+  y: bottomY - 15,
+  size: 8,
+  font: boldFont,
+});
+page.drawText("Nome: ______________________________________________", {
+  x: 55,
+  y: bottomY - 37,
+  size: 8,
+  font: timesRomanFont,
+});
+page.drawText("Ident:__________________________ Org. Emissor:_________", {
+  x: 55,
+  y: bottomY - 55,
+  size: 8,
+  font: timesRomanFont,
+});
+page.drawText("End:________________________________________________", {
+  x: 55,
+  y: bottomY - 73,
+  size: 8,
+  font: timesRomanFont,
+});
+page.drawText("Cidade:________________________________UF:__________", {
+  x: 55,
+  y: bottomY - 91,
+  size: 8,
+  font: timesRomanFont,
+});
+page.drawText("tel:_________________________________________________", {
+  x: 55,
+  y: bottomY - 109,
+  size: 8,
+  font: timesRomanFont,
+});
+
+// Box 2: Fornecedor
+page.drawRectangle({
+  x: 310,
+  y: bottomY - boxHeight,
+  width: 240,
+  height: boxHeight,
+  borderWidth: 1,
+  borderColor: rgb(0, 0, 0),
+});
+page.drawText("IDENTIFICAÇÃO DO FORNECEDOR", {
+  x: 360,
+  y: bottomY - 15,
+  size: 8,
+  font: boldFont,
+});
+page.drawText("DATA: ______/______/______", {
+  x: 315,
+  y: bottomY - 50,
+  size: 8,
+  font: timesRomanFont,
+});
+page.drawText("___________________________________________________", {
+  x: 315,
+  y: bottomY - 95,
+  size: 8,
+  font: timesRomanFont,
+});
+
+page.drawText("ASSINATURA DO FARMACÊUTICO", {
+  x: 368,
+  y: bottomY - 109,
+  size: 8,
+  font: timesRomanFont,
+});
+
 
   const pdfBytes = await pdfDoc.save();
   return pdfBytes;

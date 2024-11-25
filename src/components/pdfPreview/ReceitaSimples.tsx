@@ -23,7 +23,6 @@ interface Medication {
     doctorName,
     crm,
     issuanceDate,
-    validityDate,
     patientName,
     age,
     gender,
@@ -100,7 +99,7 @@ interface Medication {
       size: 10,
       font: boldFont,
     });
-    page.drawText("Rua Padre Timóteo Corrêa de Toledo, 259, Vila São José, Taubaté - SP", {
+    page.drawText("Rua Dr. Souza Alves, 139 - Centro, Taubaté - SP", {
       x: 110,
       y: contentStartY - 20,
       size: 8,
@@ -187,19 +186,6 @@ interface Medication {
       start: { x: 50, y: contentStartY - 120 },
       end: { x: 550, y: contentStartY - 120 },
       thickness: 1,
-    });
-
-    page.drawText("Data de validade:", {
-      x: 400,
-      y: contentStartY - 140,
-      size: 10,
-      font: boldFont,
-    });
-    page.drawText(validityDate, {
-      x: 500,
-      y: contentStartY - 140,
-      size: 10,
-      font: timesRomanFont,
     });
 
     // Medication listing
